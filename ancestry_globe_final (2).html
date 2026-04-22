@@ -532,32 +532,22 @@ function featureToMesh(feat,col,op){
     try{ idx=earcut(fv,hi.length?hi:null,2); }catch(e){ return; }
     if(!idx||!idx.length)return;
 
-    // For each triangle, subdivide each edge by slerping so the face hugs the sphere
-    // Use 1 subdivision step (splits each edge in half) — enough to close visible gaps
+    // Recursively subdivide each triangle so faces hug the sphere — 2 levels = 16 sub-triangles each
+    function smid(a,b){return a.clone().add(b).normalize().multiplyScalar(R+0.003);}
+    function subdiv(p0,p1,p2,depth){
+      if(depth===0){av.push(p0.x,p0.y,p0.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z);return;}
+      const m01=smid(p0,p1),m12=smid(p1,p2),m20=smid(p2,p0);
+      subdiv(p0,m01,m20,depth-1);subdiv(m01,p1,m12,depth-1);
+      subdiv(m20,m12,p2,depth-1);subdiv(m01,m12,m20,depth-1);
+    }
     for(let t=0;t<idx.length;t+=3){
       const i0=idx[t],i1=idx[t+1],i2=idx[t+2];
       if(!cf[i0]||!cf[i1]||!cf[i2])continue;
       const[lo0,la0]=cf[i0],[lo1,la1]=cf[i1],[lo2,la2]=cf[i2];
-
-      // Compute edge midpoints on sphere surface
       const p0=ll2v(la0,lo0,R+0.003);
       const p1=ll2v(la1,lo1,R+0.003);
       const p2=ll2v(la2,lo2,R+0.003);
-
-      function smid(a,b){
-        const m=a.clone().add(b).normalize().multiplyScalar(R+0.003);
-        return m;
-      }
-      const m01=smid(p0,p1);
-      const m12=smid(p1,p2);
-      const m20=smid(p2,p0);
-
-      // Emit 4 sub-triangles
-      const emit=(a,b,c)=>{av.push(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z);};
-      emit(p0,m01,m20);
-      emit(m01,p1,m12);
-      emit(m20,m12,p2);
-      emit(m01,m12,m20);
+      subdiv(p0,p1,p2,2);
     }
   });
 
