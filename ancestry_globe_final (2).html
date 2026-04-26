@@ -395,7 +395,7 @@ sun.position.set(4,4,5);scene.add(sun);
 // Base sphere — satellite texture applied after tiles load
 globe.add(new THREE.Mesh(
   new THREE.SphereGeometry(R,72,72),
-  new THREE.MeshPhongMaterial({color:0x4A90C4,shininess:18,specular:0x88BBD8})
+  new THREE.MeshPhongMaterial({color:0x0a1628,shininess:0,specular:0x000000})
 ));
 
 // Graticule
@@ -405,33 +405,6 @@ globe.add(new THREE.Mesh(
   for(let lo=-180;lo<180;lo+=30){const pts=[];for(let la=-88;la<=88;la+=3)pts.push(ll2v(la,lo,R+0.001));globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat));}
 })();
 
-// Lakes
-const LAKES=[
-  [[50,36],[54,37],[53,40],[50,43],[48,45],[49,47],[51,42],[52,38],[50,36]],
-  [[-92,46],[-84,46],[-84,48],[-89,49],[-92,47],[-92,46]],
-  [[-87,42],[-84,44],[-87,46],[-88,44],[-87,42]],
-  [[-82,43],[-79,44],[-83,46],[-84,45],[-82,43]],
-  [[31,-1],[34,-1],[34,-3],[31,-2],[31,-1]],
-  [[104,51],[110,52],[109,55],[104,52],[104,51]],
-  [[29,-3],[31,-4],[31,-9],[29,-7],[29,-3]],
-  [[-70,-15],[-68,-15],[-68,-17],[-70,-16],[-70,-15]],
-];
-(function(){
-  const mat=new THREE.MeshPhongMaterial({color:0x7AACCF,shininess:25,specular:0xA0CCE0});
-  LAKES.forEach(coords=>{
-    if(coords.length<3)return;
-    let cx=0,cy=0;coords.forEach(([lo,la])=>{cx+=lo;cy+=la;});cx/=coords.length;cy/=coords.length;
-    const norm=ll2v(cy,cx,1).normalize();
-    let east=new THREE.Vector3(0,1,0).cross(norm).normalize();if(east.length()<0.01)east.set(1,0,0);
-    const north=norm.clone().cross(east).normalize();
-    const flat=[];coords.forEach(([lo,la])=>{const v=ll2v(la,lo,1);flat.push(v.dot(east),v.dot(north));});
-    let idx;try{idx=earcut(flat,null,2);}catch(e){return;}
-    if(!idx||!idx.length)return;
-    const verts=[];idx.forEach(i=>{const[lo,la]=coords[i]||[cx,cy];const v=ll2v(la,lo,R+0.004);verts.push(v.x,v.y,v.z);});
-    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.computeVertexNormals();
-    globe.add(new THREE.Mesh(geo,mat));
-  });
-})();
 
 // Country tessellation
 // earcut in lon/lat, then subdivide each triangle edge to follow sphere curvature.
@@ -539,7 +512,7 @@ function featureToBorder(feat){
   }));
   return l;
 }
-const cMeshes={};const DIM=[0.42,0.42,0.42];const DIM_OP=0.84;
+const cMeshes={};const DIM=[0.56,0.56,0.56];const DIM_OP=0.86;
 function buildLand(feats){
   feats.forEach(f=>{
     if(!f.geometry)return;
@@ -552,7 +525,7 @@ function buildLand(feats){
 let currentHlIds=[];
 function applyHL(ev){
   // All country meshes transparent by default — satellite texture shows through
-  Object.values(cMeshes).forEach(m=>{m.material.color.setRGB(...DIM);m.material.opacity=0.88;m.material.transparent=true;m.renderOrder=15;});
+  Object.values(cMeshes).forEach(m=>{m.material.color.setRGB(...DIM);m.material.opacity=DIM_OP;m.material.transparent=true;m.renderOrder=15;});
   currentHlIds=[];
   if(!ev)return;
   currentHlIds=ev.hlIds||[];
@@ -572,10 +545,10 @@ function makeArc(fLL,tLL,col){
     const tr=0.0012+(w/3.5)*0.0018;
     const tg=new THREE.TubeGeometry(curve,80,tr,5,false);
     const tm=new THREE.Mesh(tg,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.72}));
-    globe.add(tm);arcObjs.push(tm);
+    tm.renderOrder=20;globe.add(tm);arcObjs.push(tm);
   } else {
     const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.68}));
-    globe.add(ln);arcObjs.push(ln);
+    ln.renderOrder=20;globe.add(ln);arcObjs.push(ln);
   }
   const tip=pts[pts.length-1],near=pts[pts.length-5];
   const dir=new THREE.Vector3().subVectors(tip,near).normalize();
@@ -585,12 +558,11 @@ function makeArc(fLL,tLL,col){
   const back=dir.clone().multiplyScalar(-as*2.2);
   const av2=[tip.x,tip.y,tip.z,tip.x+back.x+right.x,tip.y+back.y+right.y,tip.z+back.z+right.z,tip.x+back.x-right.x,tip.y+back.y-right.y,tip.z+back.z-right.z];
   const ag=new THREE.BufferGeometry();ag.setAttribute('position',new THREE.Float32BufferAttribute(av2,3));
-  globe.add(new THREE.Mesh(ag,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide})));
-  const ar=new THREE.Mesh(ag.clone(),new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));
-  arcObjs.push(ar);
+  const ah=new THREE.Mesh(ag,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));
+  ah.renderOrder=20;globe.add(ah);arcObjs.push(ah);
   const dr=0.003+(w/3.5)*0.002;
   const dot=new THREE.Mesh(new THREE.SphereGeometry(dr,6,6),new THREE.MeshBasicMaterial({color:new THREE.Color(...col)}));
-  dot.position.copy(ll2v(fLL[1],fLL[0],R+0.02));globe.add(dot);arcObjs.push(dot);
+  dot.renderOrder=20;dot.position.copy(ll2v(fLL[1],fLL[0],R+0.02));globe.add(dot);arcObjs.push(dot);
 }
 function applyArcs(ev){clearArcs();if(!ev||!ev.arcs)return;ev.arcs.forEach(a=>makeArc(a.f,a.t,a.col));}
 
