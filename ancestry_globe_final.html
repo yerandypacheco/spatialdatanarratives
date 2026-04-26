@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Got Here — Yerandy Pacheco</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans+Condensed:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<!-- earcut -->
+<script>!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t=t||self).earcut=e()}(this,function(){function t(t,e,n){n=n||2;var i,a,o,s,l,u,h=e&&e.length,c=h?e[0]*n:t.length,f=r(t,0,c,n,!0),d=[];if(!f||f.next===f.prev)return d;if(h&&(f=function(t,e,n,r){var i,a,o,s=[];for(i=0,a=e.length;i<a;i++)o=e[i]*r,s.push(k(t,n=p(t,n,o,o+(i<a-1?e[i+1]*r:t.length),r)));return n=I(s=s.sort(function(t,e){return t.x-e.x}),n),n}(t,e,f,n)),t.length>80*n){i=o=t[0],a=s=t[1];for(var m=n;m<c;m+=n)l=t[m],u=t[m+1],l<i&&(i=l),u<a&&(a=u),l>o&&(o=l),u>s&&(s=u);l=Math.max(o-i,s-a),l=0!==l?32767/l:0}return g(f,d,n,i,a,l,0),d}function r(t,e,n,r,i){var a,o;if(i===B(t,e,n,r)>0)for(a=e;a<n;a+=r)o=N(a,t[a],t[a+1],o);else for(a=n-r;a>=e;a-=r)o=N(a,t[a],t[a+1],o);return o&&x(o,o.next)&&(T(o),o=o.next),o}function i(t,e){if(!t)return t;e||(e=t);var n,r=t;do{if(n=!1,r.steiner||!x(r,r.next)&&0!==A(r.prev,r,r.next))r=r.next;else{if(T(r),(r=e=r.prev)===r.next)break;n=!0}}while(n||r!==e);return e}function g(t,e,n,r,a,o,s){if(t){!s&&o&&function(t,e,n,r){var i=t;do{null===i.z&&(i.z=b(i.x,i.y,e,n,r)),i.prevZ=i.prev,i.nextZ=i.next,i=i.next}while(i!==t);i.prevZ.nextZ=null,i.prevZ=null,function(t){var e,n,r,i,a,o,s,l,u=1;do{for(n=t,t=null,a=null,o=0;n;){for(o++,r=n,s=0,e=0;e<u&&(s++,r=r.nextZ);e++);for(l=u;s>0||l>0&&r;)0!==s&&(0===l||!r||n.z<=r.z)?(i=n,n=n.nextZ,s--):(i=r,r=r.nextZ,l--),a?a.nextZ=i:t=i,i.prevZ=a,a=i;n=r}a.nextZ=null,u*=2}while(o>1)}(i)}(t,r,a,o);for(var l,u,h=t;t.prev!==t.next;)if(l=t.prev,u=t.next,o?f(t,r,a,o):c(t))e.push(l.i/n|0),e.push(t.i/n|0),e.push(u.i/n|0),T(t),t=u.next,h=u.next;else if((t=u)===h){s?1===s?g(t=d(i(t),e,n),e,n,r,a,o,2):2===s&&m(t,e,n,r,a,o):g(i(t),e,n,r,a,o,1);break}}}function c(t){var e=t.prev,n=t,r=t.next;if(A(e,n,r)>=0)return!1;for(var i=t.next.next;i!==t.prev;){if(v(e.x,e.y,n.x,n.y,r.x,r.y,i.x,i.y)&&A(i.prev,i,i.next)>=0)return!1;i=i.next}return!0}function f(t,e,n,r){var i=t.prev,a=t,o=t.next;if(A(i,a,o)>=0)return!1;for(var s=i.x<a.x?i.x<o.x?i.x:o.x:a.x<o.x?a.x:o.x,l=i.y<a.y?i.y<o.y?i.y:o.y:a.y<o.y?a.y:o.y,u=i.x>a.x?i.x>o.x?i.x:o.x:a.x>o.x?a.x:o.x,h=i.y>a.y?i.y>o.y?i.y:o.y:a.y>o.y?a.y:o.y,c=b(s,l,e,n,r),f=b(u,h,e,n,r),d=t.prevZ,m=t.nextZ;d&&d.z>=c&&m&&m.z<=f;){if(d!==t.prev&&d!==t.next&&v(i.x,i.y,a.x,a.y,o.x,o.y,d.x,d.y)&&A(d.prev,d,d.next)>=0)return!1;if(d=d.prevZ,m!==t.prev&&m!==t.next&&v(i.x,i.y,a.x,a.y,o.x,o.y,m.x,m.y)&&A(m.prev,m,m.next)>=0)return!1;m=m.nextZ}for(;d&&d.z>=c;){if(d!==t.prev&&d!==t.next&&v(i.x,i.y,a.x,a.y,o.x,o.y,d.x,d.y)&&A(d.prev,d,d.next)>=0)return!1;d=d.prevZ}for(;m&&m.z<=f;){if(m!==t.prev&&m!==t.next&&v(i.x,i.y,a.x,a.y,o.x,o.y,m.x,m.y)&&A(m.prev,m,m.next)>=0)return!1;m=m.nextZ}return!0}function d(t,e,n){var r=t;do{var i=r.prev,a=r.next.next;!x(i,a)&&C(i,r,r.next,a)&&S(i,a)&&S(a,i)&&(e.push(i.i/n|0),e.push(r.i/n|0),e.push(a.i/n|0),T(r),T(r.next),r=t=a),r=r.next}while(r!==t);return i(r)}function m(t,e,n,r,i,a){var o=t;do{for(var s=o.next.next;s!==o.prev;){if(o.i!==s.i&&w(o,s)){var l=E(o,s);return o=i(o,o.next),l=i(l,l.next),g(o,e,n,r,i,a,0),void g(l,e,n,r,i,a,0)}s=s.next}o=o.next}while(o!==t)}function p(t,e,n,r,i){var a,o;if(B(t,n,r,i)>0===B(t,n=k(t,n,e,e,i),r,i)>0){if(!function(t,e,n){return e.x<=Math.max(t.x,n.x)&&e.x>=Math.min(t.x,n.x)&&e.y<=Math.max(t.y,n.y)&&e.y>=Math.min(t.y,n.y)}(n.prev,e,n))return n.prev;e=e}for(var s=n,l=1/0;n!==s||e!==s;){if(e.x<=n.x&&e.x>=n.prev.x&&e.y>=Math.min(n.y,n.prev.y)&&e.y<=Math.max(n.y,n.prev.y)){var u=Math.abs(e.y-n.y)/(n.y!==n.prev.y?(n.prev.y-n.y):1);if((u<l||u===l&&n.x<a.x)&&S(n,e)&&(a=n,l=u),n=n.prev,n===s){n=n.next;break}}else n=n.next}return a}function k(t,e,n,r,i){var a=e;do{var o=a.prev.i,s=a.next.i;if(!x(a,a.prev)&&!x(a,a.next)&&!function(t,e,n,r){return(L(t,e,n)||L(t,e,r)||L(n,r,t)||L(n,r,e))&&(!y(t,e,n)||!y(t,e,r)||!y(n,r,t)||!y(n,r,e))&&A(t,e,n)!==0&&A(t,e,r)!==0&&A(n,r,t)!==0&&A(n,r,e)!==0}(t[o*i],t[o*i+1],t[n*i],t[n*i+1])&&!function(t,e,n,r){return(L(t,e,n)||L(t,e,r)||L(n,r,t)||L(n,r,e))&&(!y(t,e,n)||!y(t,e,r)||!y(n,r,t)||!y(n,r,e))&&A(t,e,n)!==0&&A(t,e,r)!==0&&A(n,r,t)!==0&&A(n,r,e)!==0}(t[s*i],t[s*i+1],t[n*i],t[n*i+1]))return a;a=a.next}while(a!==e);return null}function I(t,e){for(var n=0,r=t.length;n<r;n++){var i=t[n],a=i.start,o=p(e=i.start=k(e,a,i.x,i.y,2),e,i.x,i.y,2);if(!o)return e;var s=E(o,o.next);return i(s),i(o=i(a)),e}return e}function b(t,e,n,r,i){return(t=1482910087*((t=1482910087*(t-n)*i|0)+(e=1482910087*(e-r)*i|0))|0)+(e=1482910087*e|0)|0}function v(t,e,n,r,i,a,o,s){return(i-o)*(e-s)-(t-o)*(a-s)>=0&&(t-o)*(r-s)-(n-o)*(e-s)>=0&&(n-o)*(a-s)-(i-o)*(r-s)>=0}function w(t,e){return t.next.i!==e.i&&t.prev.i!==e.i&&!function(t,e){var n=t;do{if(n.i!==t.i&&n.next.i!==t.i&&n.i!==e.i&&n.next.i!==e.i&&C(n,n.next,t,e))return!0;n=n.next}while(n!==t);return!1}(t,e)&&(S(t,e)&&S(e,t)&&function(t,e){var n=t,r=!1,i=(t.x+e.x)/2,a=(t.y+e.y)/2;do{n.y>a!=n.next.y>a&&n.next.y!==n.y&&i<(n.next.x-n.x)*(a-n.y)/(n.next.y-n.y)+n.x&&(r=!r),n=n.next}while(n!==t);return r}(t,e)&&(A(t.prev,t,e.prev)||A(t,e.prev,e))||x(t,e)&&A(t.prev,t,t.next)>0&&A(e.prev,e,e.next)>0)}function A(t,e,n){return(e.y-t.y)*(n.x-e.x)-(e.x-t.x)*(n.y-e.y)}function x(t,e){return t.x===e.x&&t.y===e.y}function C(t,e,n,r){var i=M(A(t,e,n)),a=M(A(t,e,r)),o=M(A(n,r,t)),s=M(A(n,r,e));return i!==a&&o!==s||!(0!==i||!L(t,e,n))||!(0!==a||!L(t,e,r))||!(0!==o||!L(n,r,t))||!(0!==s||!L(n,r,e))}function L(t,e,n){return n.x<=Math.max(t.x,e.x)&&n.x>=Math.min(t.x,e.x)&&n.y<=Math.max(t.y,e.y)&&n.y>=Math.min(t.y,e.y)}function M(t){return t>0?1:t<0?-1:0}function S(t,e){return A(t.prev,t,t.next)<0?A(t,e,t.next)>=0&&A(t,t.prev,e)>=0:A(t,e,t.prev)<0||A(t,t.next,e)<0}function y(t,e,n){return A(t,e,n)===0}function E(t,e){var n=new z(t.i,t.x,t.y),r=new z(e.i,e.x,e.y);return n.next=e.next,n.prev=t.prev,r.next=t.next,r.prev=e.prev,n.next.prev=n,n.prev.next=n,r.next.prev=r,r.prev.next=r,n.nextZ=r,n.prevZ=null,r.prevZ=n,n}function T(t){t.next.prev=t.prev,t.prev.next=t.next,t.prevZ&&(t.prevZ.nextZ=t.nextZ),t.nextZ&&(t.nextZ.prevZ=t.prevZ)}function N(t,e,n,r){var i=new z(t,e,n);return r?(i.next=r.next,i.prev=r,r.next.prev=i,r.next=i):(i.prev=i,i.next=i),i}function B(t,e,n,r){for(var i=0,a=e,o=n-r;a<n;a+=r)i+=(t[o]-t[a])*(t[a+1]+t[o+1]),o=a;return i}function z(t,e,n){this.i=t,this.x=e,this.y=n,this.prev=null,this.next=null,this.z=null,this.prevZ=null,this.nextZ=null,this.steiner=!1}return t.deviation=function(t,e,n,r){var i=e&&e.length,a=i?e[0]*n:t.length,o=Math.abs(B(t,0,a,n));if(i)for(var s=0,l=e.length;s<l;s++){var u=e[s]*n,h=s<l-1?e[s+1]*n:t.length;o-=Math.abs(B(t,u,h,n))}var c=0;for(s=0;s<r.length;s+=3){var f=r[s]*n,d=r[s+1]*n,m=r[s+2]*n;c+=Math.abs((t[f]-t[m])*(t[d+1]-t[f+1])-(t[f]-t[d])*(t[m+1]-t[f+1]))}return 0===o&&0===c?0:Math.abs((c-o)/o)},t.flatten=function(t){for(var e=t[0][0].length,n={vertices:[],holes:[],dimensions:e},r=0,i=0;i<t.length;i++){for(var a=0;a<t[i].length;a++)for(var o=0;o<e;o++)n.vertices.push(t[i][a][o]);i>0&&(r+=t[i-1].length,n.holes.push(r))}return n},t});</script>
+</head>
+<body>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#F6F6F6;--yellow:#FBDE7B;--blush:#EBC9CA;
+  --mauve:#775A5B;--sage:#ABB79F;--slate:#718FAB;--red:#AA2111;
+  --ink:#2A1F1F;--ink2:#4A3535;--ink3:#775A5B;--ink4:#A89090;
+}
+html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:'IBM Plex Mono',monospace;color:var(--ink);}
+
+#three-canvas{position:fixed;inset:0;z-index:1;cursor:grab;}
+#three-canvas.grabbing{cursor:grabbing;}
+
+/* TOP BAR */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:12px 22px;display:flex;justify-content:space-between;align-items:flex-start;background:rgba(246,246,246,0.9);backdrop-filter:blur(8px);border-bottom:1px solid rgba(119,90,91,0.15);pointer-events:none;}
+.tb-t{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(.9rem,1.8vw,1.45rem);font-weight:800;letter-spacing:-0.02em;line-height:1;}
+.tb-t em{color:var(--red);font-style:normal;}
+.tb-m{font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);line-height:2.1;text-align:right;}
+
+/* PANEL */
+#panel{position:fixed;top:56px;left:14px;width:292px;z-index:50;background:rgba(246,246,246,0.97);border:1px solid rgba(119,90,91,0.2);overflow:hidden;box-shadow:4px 6px 24px rgba(42,31,31,0.14);transform:translateX(-316px);transition:transform .35s cubic-bezier(0.22,1,0.36,1);max-height:calc(100vh - 180px);}
+#panel.open{transform:translateX(0);}
+#ps{overflow-y:auto;max-height:calc(100vh - 180px);scrollbar-width:thin;scrollbar-color:var(--blush) transparent;}
+.p-iw{position:relative;width:100%;height:115px;overflow:hidden;background:var(--mauve);}
+.p-iw img{width:100%;height:100%;object-fit:cover;display:block;}
+.p-ic{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(42,31,31,0.75));padding:16px 9px 5px;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:#f6f6f6;}
+.p-b{padding:11px 13px;}
+.p-fl{display:inline-block;font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:2px 5px;margin-bottom:7px;}
+.p-fl.forced{color:var(--red)}.p-fl.colonial{color:var(--slate)}.p-fl.voluntary{color:var(--sage)}.p-fl.diaspora{color:var(--mauve)}
+.p-nm{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:1.1rem;font-weight:700;line-height:1.1;margin-bottom:2px;}
+.p-pt{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:1.85rem;font-weight:700;color:var(--red);line-height:1;display:block;margin-bottom:9px;}
+.p-hr{height:1px;background:rgba(119,90,91,0.14);margin:6px 0;}
+.p-sh{font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px;font-weight:500;}
+.p-tx{font-size:8px;line-height:1.72;color:var(--ink2);margin-bottom:4px;}
+.p-sr{display:flex;gap:7px;margin:7px 0;flex-wrap:wrap;}
+.p-st{background:var(--blush);padding:4px 7px;flex:1;min-width:65px;}
+.p-sn{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:var(--red);line-height:1;}
+.p-sl{font-size:6.5px;color:var(--ink3);letter-spacing:.04em;line-height:1.3;margin-top:1px;}
+.p-td{margin-top:9px;padding:7px 9px;background:rgba(171,183,159,0.18);border-left:2px solid var(--sage);}
+.p-tdh{font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:2px;font-weight:500;}
+.p-tdt{font-size:8px;line-height:1.65;color:var(--ink2);}
+.p-cl{position:absolute;top:7px;right:9px;font-size:13px;cursor:pointer;color:var(--ink4);background:none;border:none;z-index:2;pointer-events:all;}
+
+/* SATELLITE BADGE */
+#sat-badge{display:none;}
+#zoom-btns{position:fixed;bottom:110px;right:14px;z-index:50;display:flex;flex-direction:column;gap:4px;}
+.zb{width:28px;height:28px;background:rgba(246,246,246,0.92);border:1px solid rgba(119,90,91,0.2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--ink2);line-height:1;font-family:'IBM Plex Mono',monospace;}
+.zb:hover{background:rgba(246,246,246,1);}
+
+/* TIMELINE */
+#timeline{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(246,246,246,0.93);backdrop-filter:blur(8px);border-top:1px solid rgba(119,90,91,0.15);}
+#yr-row{padding:8px 22px 2px;display:flex;align-items:baseline;gap:11px;}
+.yr-n{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:1.9rem;font-weight:800;letter-spacing:-.03em;color:var(--red);line-height:1;min-width:76px;}
+.yr-e{font-size:7.5px;letter-spacing:.06em;color:var(--ink3);line-height:1.5;flex:1;max-width:560px;}
+.yr-h{margin-left:auto;font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);}
+#dw{position:relative;height:56px;overflow:hidden;cursor:ew-resize;}
+#dn{position:absolute;left:50%;top:4px;bottom:2px;width:1.5px;background:var(--red);transform:translateX(-50%);pointer-events:none;z-index:2;}
+#dn::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--red);}
+#dt{display:flex;align-items:flex-end;height:100%;padding-bottom:8px;will-change:transform;}
+.tk{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:opacity .2s;}
+.tkm{background:var(--ink4);border-radius:1px;transition:background .2s;}
+.tkl{font-size:6.5px;letter-spacing:.07em;color:var(--ink4);white-space:nowrap;transition:color .2s;}
+.tk.active .tkm{background:var(--red);}.tk.active .tkl{color:var(--red);font-weight:500;}
+.tk.near .tkl{color:var(--ink3);}
+
+/* LOADING */
+#loading{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.lh{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:800;letter-spacing:-.03em;}
+.lh em{color:var(--red);font-style:normal;}
+.lb-bg{width:180px;height:2px;background:rgba(119,90,91,0.15);}
+.lb-fill{height:100%;background:var(--red);width:0;transition:width .3s;}
+.ll{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4);}
+</style>
+
+<canvas id="three-canvas"></canvas>
+
+<div id="topbar">
+  <div>
+    <div class="tb-t">HOW I GOT <em>HERE</em></div>
+    <div style="font-size:6.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink4);margin-top:3px">AncestryDNA · Yerandy Pacheco · Columbia GSAPP 2025</div>
+  </div>
+  <div class="tb-m">Dominican Republic → Brooklyn NY<br>23 Regions · 5 Continents · 10,000+ Years</div>
+</div>
+
+<div id="zoom-btns">
+  <button class="zb" id="zin" title="Zoom in">+</button>
+  <button class="zb" id="zout" title="Zoom out">−</button>
+</div>
+
+<div id="panel">
+  <button class="p-cl" id="pcl">✕</button>
+  <div id="ps"><div id="pc"></div></div>
+</div>
+
+<div id="timeline">
+  <div id="yr-row">
+    <div class="yr-n" id="yn">—</div>
+    <div class="yr-e" id="ye"></div>
+    <div class="yr-h">drag · scroll · arrows</div>
+  </div>
+  <div id="dw"><div id="dn"></div><div id="dt"></div></div>
+</div>
+
+<div id="loading">
+  <div class="lh">HOW I GOT <em>HERE</em></div>
+  <div class="lb-bg"><div class="lb-fill" id="lbf"></div></div>
+  <div class="ll" id="lbl">Loading geography...</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// PALETTE
+// ═══════════════════════════════════════════
+const P={
+  red:[0.667,0.129,0.067],yellow:[0.984,0.871,0.482],
+  blush:[0.922,0.788,0.792],mauve:[0.467,0.353,0.357],
+  sage:[0.671,0.718,0.624],slate:[0.443,0.561,0.671],
+  land:[0.84,0.82,0.78]
+};
+
+// ═══════════════════════════════════════════
+// SATELLITE GLOBE TEXTURE
+// Stitches ArcGIS zoom-2 tiles (4x4 grid) onto a canvas → CanvasTexture
+// Avoids WebGL CORS by using 2D canvas drawImage (no getImageData needed)
+// ═══════════════════════════════════════════
+
+function buildSatelliteTexture(onDone){
+  const TILE_W=256, TILE_H=256;
+  const COLS=4, ROWS=4;
+  const cw=COLS*TILE_W, ch=ROWS*TILE_H;
+  const offscreen=document.createElement('canvas');
+  offscreen.width=cw; offscreen.height=ch;
+  const ctx=offscreen.getContext('2d');
+  ctx.fillStyle='#1a3a4a'; ctx.fillRect(0,0,cw,ch);
+
+  let loaded=0, total=COLS*ROWS;
+
+  function tryDone(){ loaded++; if(loaded===total) onDone(offscreen); }
+
+  for(let ty=0;ty<ROWS;ty++){
+    for(let tx=0;tx<COLS;tx++){
+      (function(row,col){
+        // Use CORS proxy so tiles can be drawn to canvas and used as WebGL texture
+        const tileUrl=`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/2/${row}/${col}`;
+        const url=`https://corsproxy.io/?${encodeURIComponent(tileUrl)}`;
+        const img=new Image();
+        img.crossOrigin='anonymous'; // safe with CORS proxy
+        img.onload=function(){
+          ctx.drawImage(img, col*TILE_W, row*TILE_H, TILE_W, TILE_H);
+          tryDone();
+        };
+        img.onerror=function(){ tryDone(); };
+        img.src=url;
+      })(ty,tx);
+    }
+  }
+}
+
+// Called after globe is created — applies satellite texture to base sphere
+function applySatelliteTexture(){
+  buildSatelliteTexture(canvas2d=>{
+    const tex=new THREE.CanvasTexture(canvas2d);
+    tex.needsUpdate=true;
+    const baseSphere=globe.children[0];
+    baseSphere.material.map=tex;
+    baseSphere.material.color.set(0xffffff);
+    baseSphere.material.needsUpdate=true;
+    // Some tiles may still be loading — keep texture fresh
+    const interval=setInterval(()=>{
+      tex.needsUpdate=true;
+      // Stop refreshing after 10 seconds
+    },300);
+    setTimeout(()=>clearInterval(interval),10000);
+  });
+}
+
+// Stub — no longer needed
+function fadeAllTiles(){}
+
+// ═══════════════════════════════════════════
+// ARC WEIGHT TABLE
+// ═══════════════════════════════════════════
+const ARC_PCT={
+  '[-78.5,-1.5]':23,'[-65,-16]':8,'[-6,37]':12,'[-3.7,40.2]':12,
+  '[-15,14]':4,'[3,6]':6,'[14,-4]':5,'[-4,40]':6,'[3,28]':6,
+  '[35,39]':3,'[-2,52]':6,'[13,42]':2,'[-70.5,18.5]':36,
+  '[-77,1]':8,'[-5.5,35.8]':6,
+};
+function arcW(f){const k=JSON.stringify(f);const p=ARC_PCT[k]||4;return 0.4+(p/23)*2.8;}
+
+// ═══════════════════════════════════════════
+// TIMELINE EVENTS
+// ═══════════════════════════════════════════
+const EVENTS=[
+  {year:-8000,short:'8000 BCE',label:'First peoples settle the Ecuadorian Andes — the oldest continuous thread in my DNA',
+   hlIds:['218','068','604'],hlC:P.sage,arcs:[],camLon:-76,camLat:-2,camDist:1.75,
+   panel:{name:'Ecuador & the Andes',pct:'36%',flag:'pre-colonial origin',fc:'voluntary',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Chimborazo_Ecuador.jpg/800px-Chimborazo_Ecuador.jpg',
+    imgCap:'Chimborazo volcano, Ecuador — Kichwa sacred mountain',
+    stats:[{n:'23%',l:'Ecuador specifically'},{n:'10,000+',l:'years of settlement'},{n:'36%',l:'total Andean DNA'}],
+    secs:[
+      {h:'Before anyone arrived',t:'Kichwa and Quechua-speaking peoples settled the Ecuadorian highlands at least 10,000 years ago. By 1400 CE the Inca Empire united them into the largest pre-Columbian civilization in the Americas, spanning from modern Colombia to Argentina.'},
+      {h:'What was built',t:'My Andean ancestors engineered terraced agriculture on near-vertical slopes, built a 25,000-mile road network, developed khipu (knotted string records), and cultivated hundreds of potato, corn, and quinoa varieties still eaten worldwide today.'},
+    ],
+    today:{h:'Ecuador today',t:'The 2022 national strike led by CONAIE (Confederation of Indigenous Nationalities of Ecuador) shut down the country for 18 days — a direct continuation of the resistance my Kichwa ancestors have practiced for 500 years. Ecuador\'s 2008 constitution was the first in the world to grant legal rights to Nature — a Kichwa concept called Pachamama.'}
+   }},
+
+  {year:711,short:'711 CE',label:'Moorish forces cross into Iberia — 800 years of al-Andalus, my North African ghost ancestry begins',
+   hlIds:['504','012','724','620'],hlC:P.yellow,
+   arcs:[{f:[-5.5,35.8],t:[-5.5,37.2],col:P.yellow}],
+   camLon:-5,camLat:37,camDist:1.6,
+   panel:{name:'North Africa & al-Andalus',pct:'6%',flag:'Moorish Spain 711–1492',fc:'colonial',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Fes_-_Bou_Inania_Madrasa.jpg/800px-Fes_-_Bou_Inania_Madrasa.jpg',
+    imgCap:'Bou Inania Madrasa, Fes, Morocco — al-Andalus civilization',
+    stats:[{n:'6%',l:'North African DNA'},{n:'800yrs',l:'Moorish rule of Iberia'},{n:'711',l:'year of crossing'}],
+    secs:[
+      {h:'The crossing',t:'In 711 CE, a Berber force from Morocco crossed the Strait of Gibraltar. Within seven years they controlled most of Iberia. Their civilization — al-Andalus — produced Córdoba as medieval Europe\'s largest city, with running water, streetlights, and public libraries when Paris was still mud and thatch.'},
+      {h:'A ghost ancestry',t:'I never had a Moroccan ancestor who went to the Caribbean. This DNA arrived through Spain — colonizers who already carried centuries of North African mixing when they crossed the Atlantic. Morocco is in me through Spain\'s own history. The Amazigh (Berber) language (Tamazight) was only officially recognized by Morocco\'s constitution in 2011, after decades of state suppression.'},
+    ],
+    today:{h:'Morocco today',t:'Morocco today has 37 million people, with Amazigh (Berber) peoples making up ~40% of the population. The Rif and Atlas mountain communities — my ancestors\' highlands — remain among the most economically marginalized regions in North Africa despite centuries of cultural richness.'}
+   }},
+
+  {year:1441,short:'1441',label:'Portugal launches the Atlantic slave trade — my West African ancestors begin to be taken',
+   hlIds:['686','466','204','768','566','120','024','180','620'],hlC:P.red,
+   arcs:[{f:[-15,14],t:[-9,38.7],col:P.red}],
+   camLon:-15,camLat:12,camDist:1.9,
+   panel:{name:'West & Central Africa',pct:'20%',flag:'forced — Atlantic slave trade',fc:'forced',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Maison_des_Esclaves.jpg/800px-Maison_des_Esclaves.jpg',
+    imgCap:'Door of No Return — Maison des Esclaves, Gorée Island, Senegal',
+    stats:[{n:'12.5M',l:'Africans forcibly transported'},{n:'~400K',l:'brought to Hispaniola'},{n:'10–20%',l:'died during the crossing'}],
+    secs:[
+      {h:'The civilizations taken from',t:'My West African ancestors were not taken from poverty. They were taken from sophisticated states: the Mali Empire had universities in Timbuktu; the Benin Kingdom produced bronze sculpture rivaling Renaissance Europe; the Kongo Kingdom had a constitution and diplomatic relations with Portugal. These civilizations were deliberately destabilized to fuel the slave trade.'},
+      {h:'The Door of No Return',t:'Gorée Island, Senegal. Elmina Castle, Ghana. Cape Coast Castle, Ghana. These were the last places my ancestors touched African soil. They walked through the "Door of No Return" onto ships carrying 300–600 people in spaces so tight they could not sit upright. Those who resisted were thrown overboard.'},
+      {h:'What was deliberately destroyed',t:'The Kongo Kingdom — population 2–3 million, sophisticated bureaucracy — was hollowed out by the Portuguese slave trade between 1500 and 1800. An estimated 5.7 million Kongolese people were enslaved. The Kingdom collapsed entirely by 1914. King Afonso I of Kongo wrote to the Portuguese king in 1526 to protest. No one listened.'},
+    ],
+    today:{h:'West Africa today',t:'In 2001, the UN Durban Conference formally recognized the slave trade as a crime against humanity. No reparations have been paid by any European government. The descendants of those who profited from slavery are still wealthy. The descendants of the enslaved are still poor. This is not coincidence. Nigeria is now the most populous country in Africa with 220 million people — the descendants of those who were not taken.'}
+   }},
+
+  {year:1492,short:'1492',label:'Columbus reaches Hispaniola. Spain expels 200,000 Jews. Three worlds collide in one year.',
+   hlIds:['724','620','214','332','792','300'],hlC:P.slate,
+   arcs:[{f:[-6,37],t:[-70,18.5],col:P.slate},{f:[-4,40],t:[35,39],col:P.blush}],
+   camLon:-38,camLat:22,camDist:2.2,
+   panel:{name:'1492 — Three Worlds Collide',pct:'',flag:'the year everything changed',fc:'forced',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Zona_Colonial_Santo_Domingo.jpg/800px-Zona_Colonial_Santo_Domingo.jpg',
+    imgCap:'Zona Colonial, Santo Domingo — oldest European city in the Americas',
+    stats:[{n:'~200K',l:'Jews expelled from Spain'},{n:'250K–500K',l:'Taíno on Hispaniola in 1492'},{n:'<50K',l:'Taíno remaining by 1517'}],
+    secs:[
+      {h:'Three events, one year',t:'January 2: Last Moorish kingdom falls. March 31: Alhambra Decree orders all Jews to convert or leave Spain within four months. October 12: Columbus lands on Hispaniola. Three of the most consequential forced migrations in history — in one calendar year — all leave genetic traces in me.'},
+      {h:'First contact and first genocide',t:'When Columbus arrived, the Taíno population was 250,000–500,000. Within 25 years, fewer than 50,000 remained. By 1535, the Taíno were declared extinct by Spanish colonial records. Columbus ordered the hands cut off of Taíno people who failed to deliver their gold quota. This was not an accident. It was policy.'},
+      {h:'The Sephardic diaspora',t:'~200,000 Sephardic Jews were expelled from Spain. Conversos (converts) who stayed faced Inquisition torture and execution if suspected of practicing Judaism privately. Many converso families emigrated to Spanish Caribbean colonies where Inquisition oversight was weaker. This is likely how Sephardic DNA entered my bloodline.'},
+    ],
+    today:{h:'Hispaniola today',t:'The Dominican Republic and Haiti together occupy Hispaniola. Despite being the site of "firsts" — first European city, first cathedral, first university in the Americas — the island remains among the most economically unequal places in the hemisphere. The wounds of 1492 are structural, not historical.'}
+   }},
+
+  {year:1496,short:'1496',label:'Santo Domingo founded — first permanent European colony in the Americas, on the Taíno homeland',
+   hlIds:['214','332','630','218','068','604'],hlC:P.yellow,
+   arcs:[{f:[-78.5,-1.5],t:[-70.5,18.5],col:P.sage},{f:[-6,37],t:[-70.5,18.5],col:P.slate}],
+   camLon:-70,camLat:19,camDist:1.5,
+   panel:{name:'The Cibao Valley',pct:'My Homeland',flag:'where my family is from',fc:'diaspora',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Santiago_de_los_Caballeros_en_El_Cibao.jpg/800px-Santiago_de_los_Caballeros_en_El_Cibao.jpg',
+    imgCap:'Santiago de los Caballeros — heart of the Cibao Valley',
+    stats:[{n:'1st',l:'European city in Americas'},{n:'0',l:'Taíno people by 1535 (official)'},{n:'Cibao',l:'my ancestral valley'}],
+    secs:[
+      {h:'The Taíno homeland colonized',t:'Hispaniola was called Ayiti — "mountainous land" — by the Taíno. The Spanish renamed it and began systematic extraction. Within a generation, the Taíno were eliminated: their population reduced from hundreds of thousands to nearly zero through smallpox, forced labor in gold mines, mass execution, and starvation when they fled to the mountains. They were declared extinct by 1535.'},
+      {h:'What the encomienda meant',t:'The encomienda system gave Spanish colonizers total legal authority over Taíno and later African peoples. This meant the right to their labor, their land, and their lives. The Catholic Church blessed this system. The Pope issued a papal bull (Inter Caetera, 1493) granting Spain dominion over the Americas. My Spanish ancestors were on the beneficiary side of this arrangement.'},
+    ],
+    today:{h:'The Dominican Republic today',t:'The Dominican Republic today has 11 million people. The Cibao Valley — where my family is from — is still the agricultural and cultural heartland, famous for merengue, Cibaeño Spanish dialect, and the most vibrant carnival traditions in the country. I grew up carrying this place without always knowing what it had been.'}
+   }},
+
+  {year:1520,short:'1520s',label:'Mass forced transportation of Africans to Hispaniola — the Middle Passage at scale',
+   hlIds:['686','566','204','024','180','214','332'],hlC:P.red,
+   arcs:[{f:[-15,14],t:[-70.5,18.5],col:P.red},{f:[3,6],t:[-70.5,18.5],col:P.blush},{f:[14,-4],t:[-70.5,18.5],col:P.mauve}],
+   camLon:-40,camLat:12,camDist:2.1,
+   panel:{name:'The Middle Passage',pct:'20%',flag:'forced — no choice was given',fc:'forced',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Maison_des_Esclaves.jpg/800px-Maison_des_Esclaves.jpg',
+    imgCap:'Gorée Island, Senegal — from this coast my ancestors were taken',
+    stats:[{n:'400K',l:'to Hispaniola'},{n:'6–8wks',l:'Atlantic crossing'},{n:'400yrs',l:'duration of trade'}],
+    secs:[
+      {h:'What the ships carried',t:'The transatlantic slave trade was a business. Ships carried textiles and weapons from Europe to Africa, enslaved people from Africa to the Americas, and sugar and tobacco back to Europe. The profits funded the Industrial Revolution. Barclays Bank, Lloyd\'s of London, Harvard University, and the city of Bristol all trace significant founding wealth to this trade.'},
+      {h:'What my ancestors retained',t:'Despite the attempt to strip them of everything — names, languages, family connections, religions — my ancestors retained. Yoruba orishas became Cuban Santería. Fon vodun became Haitian Vodou. Bantu drum rhythms became the foundation of all popular music of the Western hemisphere: blues, jazz, samba, merengue, reggae, hip-hop. My ancestors did not just survive. They created the cultural DNA of an entire hemisphere.'},
+    ],
+    today:{h:'The Diaspora today',t:'The African diaspora in the Americas numbers ~200 million. In 2001, the UN Durban Conference recognized the slave trade as a crime against humanity. No reparations have been paid by any European government to any African nation or diaspora community. The structural inequality created by centuries of unpaid enslaved labor is still visible in every economic dataset.'}
+   }},
+
+  {year:1532,short:'1532',label:'Pizarro conquers the Inca Empire — my Andean ancestors forced into silver mines that killed them',
+   hlIds:['218','068','604','724'],hlC:P.sage,
+   arcs:[{f:[-77,1],t:[-65,-16],col:P.slate}],
+   camLon:-72,camLat:-8,camDist:1.7,
+   panel:{name:'The Inca Conquest',pct:'36%',flag:'genocide — colonial conquest',fc:'forced',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Machu_Picchu%2C_Peru%2C_Revised.jpg/800px-Machu_Picchu%2C_Peru%2C_Revised.jpg',
+    imgCap:'Machu Picchu, Peru — Inca architecture, now a UNESCO site',
+    stats:[{n:'90%',l:'population collapse in one century'},{n:'8M+',l:'estimated deaths 1492–1600'},{n:'4000mi',l:'Inca Empire extent'}],
+    secs:[
+      {h:'The mita — the mountain that eats men',t:'Spain imposed the mita — a forced labor draft requiring one-seventh of the male Indigenous population to work in mines at any given time. The silver mines at Potosí, Bolivia, were the most lethal. Workers were lowered into shafts breathing mercury fumes for 12-hour shifts in near-total darkness. An estimated 8 million Andean people died in Potosí\'s mines between 1545 and 1825. The Spanish called Potosí "el cerro que come hombres" — the mountain that eats men. My ancestors were eaten.'},
+      {h:'How my Andean DNA reached the Caribbean',t:'As Spanish colonial society developed, mestizaje spread Andean Indigenous DNA through the colonial network. Spanish men with Indigenous Andean children produced mestizo generations that moved through the empire. Over time, this DNA traveled from the Andes through colonial trade routes to the Caribbean islands where it became part of the genetic foundation of Dominican identity.'},
+    ],
+    today:{h:'The Andes today',t:'Today, ~10 million Kichwa people live in Ecuador, Peru, and Bolivia — one of the largest surviving Indigenous language communities in the Americas. Bolivia\'s 2009 constitution formally recognized Indigenous autonomy and the rights of nature. In Ecuador, CONAIE\'s 2022 strike demonstrated that the resistance my ancestors practiced for 500 years is still ongoing.'}
+   }},
+
+  {year:1620,short:'1620s',label:'British colonial empire expands into the Caribbean — England enters my bloodline through plantation slavery',
+   hlIds:['826','388','630','214'],hlC:P.slate,
+   arcs:[{f:[-2,52],t:[-70.5,18.5],col:P.slate}],
+   camLon:-55,camLat:20,camDist:1.95,
+   panel:{name:'The British Caribbean',pct:'6%',flag:'colonial slavery',fc:'colonial',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Codrington_Plantation_Barbados.jpg/800px-Codrington_Plantation_Barbados.jpg',
+    imgCap:'Codrington Plantation, Barbados — owned by the Church of England',
+    stats:[{n:'2M+',l:'enslaved in British Caribbean'},{n:'£20M',l:'paid to slaveholders at abolition'},{n:'2015',l:'year UK finished repaying that debt'}],
+    secs:[
+      {h:'What abolition actually meant',t:'When Britain abolished slavery in 1833, the Slavery Abolition Act compensated slaveholders £20 million — equivalent to ~£2 billion today — for the "loss of property." The enslaved received nothing. The loan Britain took to pay slaveholders was only fully repaid by British taxpayers in 2015. For 182 years, British citizens were paying off debt to the descendants of slaveholders.'},
+      {h:'How this DNA entered my bloodline',t:'My 6% English/NW European ancestry reflects the British colonial presence throughout the interconnected Caribbean. British planters, merchants, and indentured servants moved between islands. Irish Catholics brought as indentured laborers mixed with enslaved African populations. The Atlantic world was interconnected and my DNA reflects every corner of it.'},
+    ],
+    today:{h:'Britain and reparations today',t:'In 2023, CARICOM formally demanded reparations from Britain for the slave trade — an estimated $7.6 trillion. The UK government has repeatedly declined. Caribbean nations have the highest per-capita debt in the developing world, partly because post-independence economies were structured to service British commercial interests.'}
+   }},
+
+  {year:1804,short:'1804',label:'Haitian Revolution — enslaved people defeat Napoleon\'s army, create the first Black republic, are punished for it',
+   hlIds:['332','214'],hlC:P.red,arcs:[],
+   camLon:-72,camLat:19,camDist:1.45,
+   panel:{name:'The Haitian Revolution',pct:'3%',flag:'liberation — and its punishment',fc:'diaspora',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Zona_Colonial_Santo_Domingo.jpg/800px-Zona_Colonial_Santo_Domingo.jpg',
+    imgCap:'Hispaniola — the island that held everything',
+    stats:[{n:'500K',l:'enslaved in Saint-Domingue 1789'},{n:'$21B',l:'France\'s "independence debt" (modern)'},{n:'1947',l:'year Haiti finished paying France'}],
+    secs:[
+      {h:'The debt extorted from liberation',t:'When Haiti declared independence in 1804, France refused recognition unless Haiti paid reparations to French slaveholders for "lost property." The sum: 150 million gold francs — roughly $21 billion today. Haiti agreed under threat of military invasion. Haiti spent 122 years — until 1947 — paying off this debt. It is widely considered one of the largest financial crimes in history and a primary reason Haiti remains the poorest nation in the Western Hemisphere.'},
+      {h:'Why this is in my story',t:'My 3% Haitian ancestry reflects the inseparable history of two peoples on one island. Haiti and the Dominican Republic have coexisted, fought, merged, and separated on Hispaniola for five centuries. The 1937 Parsley Massacre — when Dominican soldiers killed 15,000–20,000 Haitian people over three days on Trujillo\'s order — is part of this history. The DNA doesn\'t recognize the border.'},
+    ],
+    today:{h:'Haiti today',t:'Haiti faces the consequences of 200 years of structural sabotage — France\'s extortion, US occupation (1915–1934), US-backed dictatorships, and the 2010 earthquake that killed 220,000. Despite everything, Haitian culture — art, music, Vodou, food — remains among the most vibrant and generative in the Caribbean. The revolution that the world tried to punish is still an inspiration.'}
+   }},
+
+  {year:1880,short:'1880s',label:'Mass Italian emigration to Latin America — 4 million leave, the one migration in my DNA that was chosen',
+   hlIds:['380'],hlC:P.sage,
+   arcs:[{f:[13,42],t:[-38,-10],col:P.sage}],
+   camLon:5,camLat:28,camDist:2.1,
+   panel:{name:'Italy — A Migration Chosen',pct:'2%',flag:'voluntary emigration',fc:'voluntary',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Colosseum_in_Rome%2C_Italy_-_April_2007.jpg/800px-Colosseum_in_Rome%2C_Italy_-_April_2007.jpg',
+    imgCap:'Rome — from which 4 million Italians chose to leave',
+    stats:[{n:'4M+',l:'Italians to Latin America 1880–1930'},{n:'2M',l:'to Argentina alone'},{n:'2%',l:'my Italian ancestry'}],
+    secs:[
+      {h:'The one strand that chose',t:'Italian unification (1861) brought political upheaval but not prosperity to southern Italy and Sicily. Between 1880 and 1930, over 4 million Italians emigrated to Latin America. My 2% Northeastern Italian ancestry is one of the only pieces of my DNA that reflects a migration freely chosen. The person who carried this DNA to the Americas was not enslaved, not expelled, not conquered. They were poor and they made a decision.'},
+    ],
+    today:{h:'The Italian diaspora today',t:'Today, ~60–80 million people worldwide claim Italian descent — more than Italy\'s own population. Argentina\'s Italian-descended population is estimated at 25 million. Buenos Aires is called "the most European city in Latin America" — a framing that erases the Indigenous and African peoples whose labor and land built it.'}
+   }},
+
+  {year:1961,short:'1961',label:'Trujillo assassinated — US-backed dictatorship ends, mass Dominican emigration to New York begins',
+   hlIds:['214','840'],hlC:P.red,
+   arcs:[{f:[-70.5,18.5],t:[-73.95,40.65],col:P.red}],
+   camLon:-72,camLat:28,camDist:1.9,
+   panel:{name:'My Family Moves North',pct:'',flag:'Dominican diaspora',fc:'diaspora',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Brooklyn_Bridge_and_Manhattan_Bridge_from_above%2C_looking_west%2C_April_2016.jpg/800px-Brooklyn_Bridge_and_Manhattan_Bridge_from_above%2C_looking_west%2C_April_2016.jpg',
+    imgCap:'Brooklyn, New York — where this story ends',
+    stats:[{n:'760K+',l:'Dominicans in NYC today'},{n:'31yrs',l:'duration of Trujillo\'s dictatorship'},{n:'15–20K',l:'killed in the 1937 Parsley Massacre'}],
+    secs:[
+      {h:'Trujillo — US-backed dictatorship',t:'Rafael Trujillo ruled the Dominican Republic from 1930 to 1961. He maintained power with full US support — the US trained his military and backed his government throughout. In 1937, Trujillo ordered the Parsley Massacre: Dominican soldiers executed 15,000–20,000 Haitian people over three days, using machetes. Victims were identified by their pronunciation of the Spanish word for parsley (perejil). This is the country my family is from.'},
+      {h:'My family carries it all north',t:'After Trujillo\'s 1961 assassination, US immigration policy opened and the first large wave of Dominican emigration to New York began. My family carried 500 years of history in their bodies — Kichwa mountain peoples, West African griots, Iberian colonizers, Sephardic conversos, Moorish scholars, enslaved Caribbean people, and resilient Cibaeño farmers. All of that became me, in East Brooklyn.'},
+    ],
+    today:{h:'The Dominican community in New York',t:'760,000+ Dominicans in NYC today. Washington Heights is still called Quisqueya Heights by its community. Dominican-Americans have produced mayors, congresswomen, baseball players, chefs, artists, and scholars. I live in East Brooklyn, carrying all of this forward.'}
+   }},
+
+  {year:2025,short:'2025',label:'AncestryDNA reveals 23 regions across 5 continents — 10,000 years converge in Brooklyn',
+   hlIds:['218','068','604','686','566','204','024','724','620','504','012','792','214','840'],
+   hlC:P.yellow,
+   arcs:[
+     {f:[-78.5,-1.5],t:[-73.95,40.65],col:P.sage},
+     {f:[-15,14],    t:[-73.95,40.65],col:P.red},
+     {f:[-3.7,40.2], t:[-73.95,40.65],col:P.slate},
+     {f:[3,28],      t:[-73.95,40.65],col:P.yellow},
+     {f:[35,39],     t:[-73.95,40.65],col:P.blush},
+   ],
+   camLon:-73,camLat:40,camDist:1.35,
+   panel:{name:'Brooklyn — The Convergence',pct:'23 regions',flag:'all worlds converge in me',fc:'diaspora',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Brooklyn_Bridge_and_Manhattan_Bridge_from_above%2C_looking_west%2C_April_2016.jpg/800px-Brooklyn_Bridge_and_Manhattan_Bridge_from_above%2C_looking_west%2C_April_2016.jpg',
+    imgCap:'Brooklyn, New York — 40.6501°N 73.9496°W',
+    stats:[{n:'36%',l:'Indigenous Americas'},{n:'20%',l:'W. & C. Africa'},{n:'20%',l:'Iberian Peninsula'}],
+    secs:[
+      {h:'What these numbers actually mean',t:'23 ancestral regions. 5 continents. But these are not just percentages — they are records of specific violences and survivals. 36% Indigenous: the people who were already here, dispossessed and killed. 20% West African: the people who were taken in chains. 20% Iberian: the colonizers who enabled both. 6% North African: absorbed through 800 years of occupation. 6% Sephardic Jewish: expelled in 1492. 6% English: the plantation economy. Each number is a story of power.'},
+      {h:'The reckoning I carry',t:'I carry the DNA of the enslaved and the enslaver, the colonized and the colonizer, the expelled and the expeller — simultaneously, in my cells, inseparably. My existence is not a metaphor for reconciliation. It is evidence of violence — and also of survival. I cannot root for one side of my own history. What I can do is understand it clearly and name what happened honestly.'},
+      {h:'40.6501°N 73.9496°W',t:'East Brooklyn, New York. The endpoint of every migration in this story. My home. A place where Kichwa mountains, Senegambian coastlines, Andalusian plazas, Congolese rivers, Cibao valleys, and Atlantic shipping routes all terminate — in one person, going about their life.'},
+    ],
+    today:{h:'This project',t:'A spatial data narrative about ancestry, migration, and the violence embedded in genetic inheritance. Built at Columbia GSAPP, 2025, Spatial Data Narratives course. The data is real. The history is documented. The grief and the pride are mine.'}
+   }},
+];
+
+// ═══════════════════════════════════════════
+// GLOBE HELPERS
+// ═══════════════════════════════════════════
+const R=1.0;
+function ll2v(lat,lon,r){
+  const phi=(90-lat)*Math.PI/180,th=(lon+180)*Math.PI/180;
+  return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(th),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(th));
+}
+
+// ═══════════════════════════════════════════
+// THREE.JS SETUP
+// ═══════════════════════════════════════════
+const canvas=document.getElementById('three-canvas');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setClearColor(0x080808,1); // dark space bg
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,window.innerWidth/window.innerHeight,0.01,100);
+camera.position.z=3;
+
+const globe=new THREE.Group();
+scene.add(globe);
+scene.add(new THREE.AmbientLight(0xfaf6f0,1.15));
+const sun=new THREE.DirectionalLight(0xfff8f0,0.5);
+sun.position.set(4,4,5);scene.add(sun);
+
+// Full satellite texture globe (NASA/Natural Earth)
+// Base sphere — satellite texture applied after tiles load
+globe.add(new THREE.Mesh(
+  new THREE.SphereGeometry(R,72,72),
+  new THREE.MeshPhongMaterial({color:0x4A90C4,shininess:18,specular:0x88BBD8})
+));
+
+// Graticule
+(function(){
+  const mat=new THREE.LineBasicMaterial({color:0x7898B0,transparent:true,opacity:0.15});
+  for(let la=-80;la<=80;la+=20){const pts=[];for(let lo=0;lo<=360;lo+=3)pts.push(ll2v(la,lo-180,R+0.001));globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat));}
+  for(let lo=-180;lo<180;lo+=30){const pts=[];for(let la=-88;la<=88;la+=3)pts.push(ll2v(la,lo,R+0.001));globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat));}
+})();
+
+// Lakes
+const LAKES=[
+  [[50,36],[54,37],[53,40],[50,43],[48,45],[49,47],[51,42],[52,38],[50,36]],
+  [[-92,46],[-84,46],[-84,48],[-89,49],[-92,47],[-92,46]],
+  [[-87,42],[-84,44],[-87,46],[-88,44],[-87,42]],
+  [[-82,43],[-79,44],[-83,46],[-84,45],[-82,43]],
+  [[31,-1],[34,-1],[34,-3],[31,-2],[31,-1]],
+  [[104,51],[110,52],[109,55],[104,52],[104,51]],
+  [[29,-3],[31,-4],[31,-9],[29,-7],[29,-3]],
+  [[-70,-15],[-68,-15],[-68,-17],[-70,-16],[-70,-15]],
+];
+(function(){
+  const mat=new THREE.MeshPhongMaterial({color:0x7AACCF,shininess:25,specular:0xA0CCE0});
+  LAKES.forEach(coords=>{
+    if(coords.length<3)return;
+    let cx=0,cy=0;coords.forEach(([lo,la])=>{cx+=lo;cy+=la;});cx/=coords.length;cy/=coords.length;
+    const norm=ll2v(cy,cx,1).normalize();
+    let east=new THREE.Vector3(0,1,0).cross(norm).normalize();if(east.length()<0.01)east.set(1,0,0);
+    const north=norm.clone().cross(east).normalize();
+    const flat=[];coords.forEach(([lo,la])=>{const v=ll2v(la,lo,1);flat.push(v.dot(east),v.dot(north));});
+    let idx;try{idx=earcut(flat,null,2);}catch(e){return;}
+    if(!idx||!idx.length)return;
+    const verts=[];idx.forEach(i=>{const[lo,la]=coords[i]||[cx,cy];const v=ll2v(la,lo,R+0.004);verts.push(v.x,v.y,v.z);});
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.computeVertexNormals();
+    globe.add(new THREE.Mesh(geo,mat));
+  });
+})();
+
+// Country tessellation
+function featureToMesh(feat,col,op){
+  const polys=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.coordinates;
+  const av=[];
+  polys.forEach(poly=>{
+    const outer=poly[0];if(!outer||outer.length<3)return;
+    let cx=0,cy=0;outer.forEach(([lo,la])=>{cx+=lo;cy+=la;});cx/=outer.length;cy/=outer.length;
+    const norm=ll2v(cy,cx,1).normalize();
+    let east=new THREE.Vector3(0,1,0).cross(norm).normalize();if(east.length()<0.01)east.set(1,0,0);
+    const north=norm.clone().cross(east).normalize();
+    const pj=r=>{const f=[];r.forEach(([lo,la])=>{const v=ll2v(la,lo,1);f.push(v.dot(east),v.dot(north));});return f;};
+    const of=pj(outer),holes=poly.slice(1).map(pj);
+    let fv=[...of];const hi=[];holes.forEach(h=>{hi.push(fv.length/2);fv=fv.concat(h);});
+    let idx;try{idx=earcut(fv,hi.length?hi:null,2);}catch(e){return;}
+    if(!idx||!idx.length)return;
+    const ac=[outer,...poly.slice(1)];const cf=[];ac.forEach(r=>r.forEach(([lo,la])=>cf.push([lo,la])));
+    idx.forEach(i=>{const[lo,la]=cf[i]||[cx,cy];const v=ll2v(la,lo,R+0.003);av.push(v.x,v.y,v.z);});
+  });
+  if(!av.length)return null;
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(av,3));geo.computeVertexNormals();
+  return new THREE.Mesh(geo,new THREE.MeshPhongMaterial({color:new THREE.Color(...col),transparent:op<1,opacity:op,side:THREE.DoubleSide,shininess:4}));
+}
+function featureToBorder(feat){
+  const l=[];const ps=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.coordinates;
+  ps.forEach(p=>p.forEach(r=>{const pts=r.map(([lo,la])=>ll2v(la,lo,R+0.005));const bl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0.25}));bl.renderOrder=16;l.push(bl);}));
+  return l;
+}
+const cMeshes={};const DIM=[0.72,0.71,0.70];const DIM_OP=0.88;
+function buildLand(feats){
+  feats.forEach(f=>{
+    if(!f.geometry)return;
+    const m=featureToMesh(f,DIM,DIM_OP);
+    if(m){m.userData.id=f.id+'';globe.add(m);cMeshes[f.id+'']=m;}
+    featureToBorder(f).forEach(l=>globe.add(l));
+  });
+}
+
+let currentHlIds=[];
+function applyHL(ev){
+  // All country meshes transparent by default — satellite texture shows through
+  Object.values(cMeshes).forEach(m=>{m.material.color.setRGB(...DIM);m.material.opacity=0.88;m.material.transparent=true;m.renderOrder=15;});
+  currentHlIds=[];
+  if(!ev)return;
+  currentHlIds=ev.hlIds||[];
+  // Highlighted countries get a semi-transparent color overlay on top of satellite
+  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.5;m.material.transparent=true;m.renderOrder=15;}});
+}
+
+// Arcs
+let arcObjs=[];
+function clearArcs(){arcObjs.forEach(o=>globe.remove(o));arcObjs=[];}
+function makeArc(fLL,tLL,col){
+  const w=arcW(fLL);
+  const pts=[];
+  for(let i=0;i<=80;i++){const t=i/80;const la=fLL[1]+(tLL[1]-fLL[1])*t;const lo=fLL[0]+(tLL[0]-fLL[0])*t;const h=R+0.015+Math.sin(t*Math.PI)*0.07;pts.push(ll2v(la,lo,h));}
+  if(w>1.5){
+    const curve=new THREE.CatmullRomCurve3(pts);
+    const tr=0.0012+(w/3.5)*0.0018;
+    const tg=new THREE.TubeGeometry(curve,80,tr,5,false);
+    const tm=new THREE.Mesh(tg,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.72}));
+    globe.add(tm);arcObjs.push(tm);
+  } else {
+    const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.68}));
+    globe.add(ln);arcObjs.push(ln);
+  }
+  const tip=pts[pts.length-1],near=pts[pts.length-5];
+  const dir=new THREE.Vector3().subVectors(tip,near).normalize();
+  const up=tip.clone().normalize();
+  const right=new THREE.Vector3().crossVectors(dir,up).normalize();
+  const as=0.003+(w/3.5)*0.002;right.multiplyScalar(as);
+  const back=dir.clone().multiplyScalar(-as*2.2);
+  const av2=[tip.x,tip.y,tip.z,tip.x+back.x+right.x,tip.y+back.y+right.y,tip.z+back.z+right.z,tip.x+back.x-right.x,tip.y+back.y-right.y,tip.z+back.z-right.z];
+  const ag=new THREE.BufferGeometry();ag.setAttribute('position',new THREE.Float32BufferAttribute(av2,3));
+  globe.add(new THREE.Mesh(ag,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide})));
+  const ar=new THREE.Mesh(ag.clone(),new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));
+  arcObjs.push(ar);
+  const dr=0.003+(w/3.5)*0.002;
+  const dot=new THREE.Mesh(new THREE.SphereGeometry(dr,6,6),new THREE.MeshBasicMaterial({color:new THREE.Color(...col)}));
+  dot.position.copy(ll2v(fLL[1],fLL[0],R+0.02));globe.add(dot);arcObjs.push(dot);
+}
+function applyArcs(ev){clearArcs();if(!ev||!ev.arcs)return;ev.arcs.forEach(a=>makeArc(a.f,a.t,a.col));}
+
+// Brooklyn dot
+const bkd=new THREE.Mesh(new THREE.SphereGeometry(0.009,8,8),new THREE.MeshBasicMaterial({color:0xAA2111}));
+bkd.position.copy(ll2v(40.65,-73.95,R+0.022));globe.add(bkd);
+
+// ─ CAMERA + DRAG ─
+let camTgt=new THREE.Vector3(0,0,3),camCur=new THREE.Vector3(0,0,3);
+let qTgt=new THREE.Quaternion(),qCur=new THREE.Quaternion();
+let userQ=new THREE.Quaternion();
+let dragging=false,prevMX=0,prevMY=0,momX=0,momY=0;
+let autoSpin=false,idleT=null;
+
+canvas.addEventListener('mousedown',e=>{if(e.target!==canvas)return;dragging=true;prevMX=e.clientX;prevMY=e.clientY;momX=0;momY=0;canvas.classList.add('grabbing');clearTimeout(idleT);autoSpin=false;});
+window.addEventListener('mousemove',e=>{
+  if(!dragging)return;const dx=(e.clientX-prevMX)*0.005,dy=(e.clientY-prevMY)*0.005;momX=dx;momY=dy;
+  const qx=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),dx);
+  const qy=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),dy);
+  userQ.premultiply(qx).premultiply(qy);prevMX=e.clientX;prevMY=e.clientY;
+});
+window.addEventListener('mouseup',()=>{if(!dragging)return;dragging=false;canvas.classList.remove('grabbing');idleT=setTimeout(()=>{autoSpin=true;},5000);});
+canvas.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;dragging=true;prevMX=e.touches[0].clientX;prevMY=e.touches[0].clientY;momX=0;momY=0;clearTimeout(idleT);autoSpin=false;},{passive:true});
+window.addEventListener('touchmove',e=>{
+  if(!dragging||e.touches.length!==1)return;const dx=(e.touches[0].clientX-prevMX)*0.005,dy=(e.touches[0].clientY-prevMY)*0.005;momX=dx;momY=dy;
+  const qx=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),dx);
+  const qy=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),dy);
+  userQ.premultiply(qx).premultiply(qy);prevMX=e.touches[0].clientX;prevMY=e.touches[0].clientY;
+},{passive:true});
+window.addEventListener('touchend',()=>{if(!dragging)return;dragging=false;idleT=setTimeout(()=>{autoSpin=true;},5000);});
+
+function setCam(ev){
+  if(!ev)return;
+  const v=ll2v(ev.camLat,ev.camLon,1).normalize();
+  qTgt.copy(new THREE.Quaternion().setFromUnitVectors(v,new THREE.Vector3(0,0,1)));
+  userQ.identity();camTgt.set(0,0,ev.camDist);
+}
+
+// ─ RENDER LOOP ─
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),0.1);
+  qCur.slerp(qTgt,Math.min(1,dt*4.5));
+  if(!dragging){
+    if(Math.abs(momX)>0.0001||Math.abs(momY)>0.0001){
+      const qx=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),momX*0.9);
+      const qy=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),momY*0.9);
+      userQ.premultiply(qx).premultiply(qy);momX*=0.9;momY*=0.9;
+      if(Math.abs(momX)<0.0002)momX=0;if(Math.abs(momY)<0.0002)momY=0;
+    }
+    if(autoSpin){const qs=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),dt*0.04);userQ.premultiply(qs);}
+  }
+  globe.quaternion.copy(qCur.clone().multiply(userQ));
+  camCur.lerp(camTgt,Math.min(1,dt*4.5));camera.position.copy(camCur);camera.lookAt(0,0,0);
+  if(!dialDrag){dialOff+=(dialTgt-dialOff)*Math.min(1,dt*14);renderDial();}
+  fadeAllTiles(dt);
+  renderer.render(scene,camera);
+}
+
+// ─ TIMELINE ─
+const TW=66;let dialOff=0,dialTgt=0,curIdx=0,dialDrag=false,dDX=0,dDO=0;
+const dialTrack=document.getElementById('dt'),yn=document.getElementById('yn'),ye=document.getElementById('ye');
+function buildDial(){
+  dialTrack.innerHTML='';
+  EVENTS.forEach((ev,i)=>{
+    const t=document.createElement('div');t.className='tk';t.style.width=TW+'px';
+    const m=document.createElement('div');m.className='tkm';m.style.cssText=`width:1.5px;height:${ev.year<0||ev.year%100===0?18:10}px`;
+    const l=document.createElement('div');l.className='tkl';l.textContent=ev.short||ev.year;
+    t.append(m,l);t.addEventListener('click',()=>goTo(i));dialTrack.appendChild(t);
+  });
+  const vw=window.innerWidth;
+  dialTrack.style.width=(EVENTS.length*TW+vw)+'px';
+  dialTrack.style.paddingLeft=(vw/2)+'px';dialTrack.style.paddingRight=(vw/2-TW)+'px';
+  renderDial();
+}
+function renderDial(){
+  dialTrack.style.transform=`translateX(${dialOff}px)`;
+  const cl=Math.max(0,Math.min(EVENTS.length-1,Math.round(-dialOff/TW)));
+  dialTrack.querySelectorAll('.tk').forEach((t,i)=>{const d=Math.abs(i-cl);t.classList.toggle('active',i===cl);t.classList.toggle('near',d===1);t.style.opacity=Math.max(0.28,1-d*0.22);});
+}
+function goTo(idx){
+  idx=Math.max(0,Math.min(EVENTS.length-1,idx));curIdx=idx;dialTgt=-idx*TW;
+  const ev=EVENTS[idx];applyHL(ev);applyArcs(ev);setCam(ev);
+  yn.textContent=ev.short||ev.year;ye.textContent=ev.label;
+  openPanel(ev);
+  // Satellite is now global texture — no per-event tiles needed
+}
+const dw=document.getElementById('dw');
+dw.addEventListener('mousedown',e=>{dialDrag=true;dDX=e.clientX;dDO=dialOff;dw.style.cursor='grabbing';});
+window.addEventListener('mousemove',e=>{
+  if(!dialDrag)return;
+  dialOff=Math.max(-(EVENTS.length-1)*TW,Math.min(0,dDO+(e.clientX-dDX)));
+  dialTgt=dialOff;renderDial();
+  const c=Math.max(0,Math.min(EVENTS.length-1,Math.round(-dialOff/TW)));
+  if(c!==curIdx){curIdx=c;const ev=EVENTS[c];applyHL(ev);applyArcs(ev);setCam(ev);yn.textContent=ev.short||ev.year;ye.textContent=ev.label;openPanel(ev);}
+});
+window.addEventListener('mouseup',()=>{if(!dialDrag)return;dialDrag=false;dw.style.cursor='ew-resize';goTo(Math.round(-dialOff/TW));});
+dw.addEventListener('touchstart',e=>{dialDrag=true;dDX=e.touches[0].clientX;dDO=dialOff;},{passive:true});
+window.addEventListener('touchmove',e=>{
+  if(!dialDrag)return;
+  dialOff=Math.max(-(EVENTS.length-1)*TW,Math.min(0,dDO+(e.touches[0].clientX-dDX)));
+  dialTgt=dialOff;renderDial();
+  const c=Math.max(0,Math.min(EVENTS.length-1,Math.round(-dialOff/TW)));
+  if(c!==curIdx){curIdx=c;const ev=EVENTS[c];applyHL(ev);applyArcs(ev);setCam(ev);yn.textContent=ev.short||ev.year;ye.textContent=ev.label;}
+},{passive:true});
+window.addEventListener('touchend',()=>{if(!dialDrag)return;dialDrag=false;goTo(Math.round(-dialOff/TW));});
+window.addEventListener('wheel',e=>{
+  if(e.target===canvas||e.target===document.body){
+    e.preventDefault();
+    if(e.ctrlKey||e.metaKey){
+      // Pinch zoom on trackpad
+      camTgt.z=Math.max(1.15,Math.min(5.5,camTgt.z+e.deltaY*0.005));
+    } else {
+      // Navigate timeline with scroll
+      goTo(curIdx+(e.deltaY>0?1:-1));
+    }
+  }
+},{passive:false});
+
+// Zoom with +/- keys
+window.addEventListener('keydown',e=>{
+  if(e.key==='+'||e.key==='=')camTgt.z=Math.max(1.15,camTgt.z-0.15);
+  if(e.key==='-')camTgt.z=Math.min(5.5,camTgt.z+0.15);
+});
+window.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')goTo(curIdx+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(curIdx-1);});
+
+// Zoom buttons
+document.getElementById('zin').addEventListener('click',()=>{camTgt.z=Math.max(1.15,camTgt.z-0.25);});
+document.getElementById('zout').addEventListener('click',()=>{camTgt.z=Math.min(5.5,camTgt.z+0.25);});
+
+// Pinch-to-zoom on touch
+let lastPinchDist=null;
+canvas.addEventListener('touchstart',e=>{if(e.touches.length===2){lastPinchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
+canvas.addEventListener('touchmove',e=>{
+  if(e.touches.length===2&&lastPinchDist!==null){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    const delta=lastPinchDist-d;
+    camTgt.z=Math.max(1.15,Math.min(5.5,camTgt.z+delta*0.008));
+    lastPinchDist=d;
+  }
+},{passive:true});
+canvas.addEventListener('touchend',()=>{lastPinchDist=null;},{passive:true});
+
+// ─ PANEL ─
+const panelEl=document.getElementById('panel'),pc=document.getElementById('pc');
+document.getElementById('pcl').addEventListener('click',()=>panelEl.classList.remove('open'));
+function openPanel(ev){
+  if(!ev.panel){panelEl.classList.remove('open');return;}
+  const p=ev.panel;let h='';
+  if(p.img)h+=`<div class="p-iw"><img src="${p.img}" onerror="this.parentNode.style.background='var(--mauve)';this.style.display='none'" alt=""><div class="p-ic">${p.imgCap||''}</div></div>`;
+  h+=`<div class="p-b">`;
+  h+=`<div class="p-fl ${p.fc}">${p.flag}</div>`;
+  h+=`<div class="p-nm">${p.name}</div>`;
+  if(p.pct)h+=`<div class="p-pt">${p.pct}</div>`;
+  if(p.stats){h+=`<div class="p-sr">`;p.stats.forEach(s=>{h+=`<div class="p-st"><div class="p-sn">${s.n}</div><div class="p-sl">${s.l}</div></div>`;});h+=`</div>`;}
+  p.secs.forEach(s=>{h+=`<div class="p-hr"></div><div class="p-sh">${s.h}</div><div class="p-tx">${s.t}</div>`;});
+  if(p.today)h+=`<div class="p-hr"></div><div class="p-td"><div class="p-tdh">${p.today.h}</div><div class="p-tdt">${p.today.t}</div></div>`;
+  h+=`</div>`;
+  pc.innerHTML=h;panelEl.classList.add('open');
+}
+
+// ─ RESIZE ─
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+
+// ─ INIT ─
+async function init(){
+  const lbf=document.getElementById('lbf'),lbl=document.getElementById('lbl');
+  lbf.style.width='15%';lbl.textContent='Loading geography...';
+  const wd=await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+  lbf.style.width='55%';lbl.textContent='Tessellating countries...';
+  const feats=topojson.feature(wd,wd.objects.countries).features;
+  lbf.style.width='78%';lbl.textContent='Building globe...';
+  buildLand(feats);
+  applySatelliteTexture();
+  lbf.style.width='92%';lbl.textContent='Building timeline...';
+  buildDial();
+  lbf.style.width='100%';
+  setTimeout(()=>{const lo=document.getElementById('loading');lo.style.transition='opacity .5s';lo.style.opacity='0';setTimeout(()=>lo.style.display='none',500);},200);
+  goTo(0);animate();
+}
+init();
+</script>
+</body>
+</html>
