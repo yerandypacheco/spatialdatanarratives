@@ -73,6 +73,13 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
 .tk.active .tkm{background:var(--red);}.tk.active .tkl{color:var(--red);font-weight:500;}
 .tk.near .tkl{color:var(--ink3);}
 
+/* ANCESTRY PANEL */
+#dna-btn{position:fixed;top:14px;right:14px;z-index:51;background:rgba(246,246,246,0.95);border:1px solid rgba(119,90,91,0.2);padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink2);pointer-events:all;}
+#dna-btn:hover{background:#fff;}
+#dna-panel{position:fixed;top:50px;right:14px;z-index:50;width:220px;background:rgba(246,246,246,0.97);border:1px solid rgba(119,90,91,0.2);box-shadow:4px 6px 24px rgba(42,31,31,0.14);overflow-y:auto;max-height:calc(100vh - 180px);display:none;}
+#dna-panel.open{display:block;}
+#dna-panel img{width:100%;display:block;}
+
 /* LOADING */
 #loading{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .lh{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:800;letter-spacing:-.03em;}
@@ -90,6 +97,11 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
     <div style="font-size:6.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink4);margin-top:3px">AncestryDNA · Yerandy Pacheco · Columbia GSAPP 2025</div>
   </div>
   <div class="tb-m">Dominican Republic → Brooklyn NY<br>23 Regions · 5 Continents · 10,000+ Years</div>
+</div>
+
+<button id="dna-btn">DNA Results</button>
+<div id="dna-panel">
+  <img src="ancestry_results.png" alt="AncestryDNA Results">
 </div>
 
 <div id="zoom-btns">
@@ -133,61 +145,20 @@ const P={
 
 // ═══════════════════════════════════════════
 // SATELLITE GLOBE TEXTURE
-// Stitches ArcGIS zoom-2 tiles (4x4 grid) onto a canvas → CanvasTexture
-// Avoids WebGL CORS by using 2D canvas drawImage (no getImageData needed)
+// Single equirectangular Blue Marble texture via THREE.TextureLoader
 // ═══════════════════════════════════════════
 
-function buildSatelliteTexture(onDone){
-  const TILE_W=256, TILE_H=256;
-  const COLS=4, ROWS=4;
-  const cw=COLS*TILE_W, ch=ROWS*TILE_H;
-  const offscreen=document.createElement('canvas');
-  offscreen.width=cw; offscreen.height=ch;
-  const ctx=offscreen.getContext('2d');
-  ctx.fillStyle='#1a3a4a'; ctx.fillRect(0,0,cw,ch);
-
-  let loaded=0, total=COLS*ROWS;
-
-  function tryDone(){ loaded++; if(loaded===total) onDone(offscreen); }
-
-  for(let ty=0;ty<ROWS;ty++){
-    for(let tx=0;tx<COLS;tx++){
-      (function(row,col){
-        // Use CORS proxy so tiles can be drawn to canvas and used as WebGL texture
-        const tileUrl=`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/2/${row}/${col}`;
-        const url=`https://corsproxy.io/?${encodeURIComponent(tileUrl)}`;
-        const img=new Image();
-        img.crossOrigin='anonymous'; // safe with CORS proxy
-        img.onload=function(){
-          ctx.drawImage(img, col*TILE_W, row*TILE_H, TILE_W, TILE_H);
-          tryDone();
-        };
-        img.onerror=function(){ tryDone(); };
-        img.src=url;
-      })(ty,tx);
-    }
-  }
-}
-
-// Called after globe is created — applies satellite texture to base sphere
 function applySatelliteTexture(){
-  buildSatelliteTexture(canvas2d=>{
-    const tex=new THREE.CanvasTexture(canvas2d);
-    tex.needsUpdate=true;
-    const baseSphere=globe.children[0];
-    baseSphere.material.map=tex;
-    baseSphere.material.color.set(0xffffff);
-    baseSphere.material.needsUpdate=true;
-    // Some tiles may still be loading — keep texture fresh
-    const interval=setInterval(()=>{
-      tex.needsUpdate=true;
-      // Stop refreshing after 10 seconds
-    },300);
-    setTimeout(()=>clearInterval(interval),10000);
-  });
+  new THREE.TextureLoader().load(
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+    tex=>{
+      const baseSphere=globe.children[0];
+      baseSphere.material.map=tex;
+      baseSphere.material.color.set(0xffffff);
+      baseSphere.material.needsUpdate=true;
+    }
+  );
 }
-
-// Stub — no longer needed
 function fadeAllTiles(){}
 
 // ═══════════════════════════════════════════
@@ -463,33 +434,92 @@ const LAKES=[
 })();
 
 // Country tessellation
+// earcut in lon/lat, then subdivide each triangle edge to follow sphere curvature.
+// This eliminates the "holes at boundaries" caused by flat triangles bowing inward on the sphere.
 function featureToMesh(feat,col,op){
   const polys=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.coordinates;
   const av=[];
+
   polys.forEach(poly=>{
     const outer=poly[0];if(!outer||outer.length<3)return;
-    let cx=0,cy=0;outer.forEach(([lo,la])=>{cx+=lo;cy+=la;});cx/=outer.length;cy/=outer.length;
-    const norm=ll2v(cy,cx,1).normalize();
-    let east=new THREE.Vector3(0,1,0).cross(norm).normalize();if(east.length()<0.01)east.set(1,0,0);
-    const north=norm.clone().cross(east).normalize();
-    const pj=r=>{const f=[];r.forEach(([lo,la])=>{const v=ll2v(la,lo,1);f.push(v.dot(east),v.dot(north));});return f;};
-    const of=pj(outer),holes=poly.slice(1).map(pj);
-    let fv=[...of];const hi=[];holes.forEach(h=>{hi.push(fv.length/2);fv=fv.concat(h);});
-    let idx;try{idx=earcut(fv,hi.length?hi:null,2);}catch(e){return;}
+    const holeRings=poly.slice(1);
+    const allRings=[outer,...holeRings];
+
+    // Check for antimeridian crossing — if any ring spans > 180° in longitude, skip it
+    let skip=false;
+    for(const ring of allRings){
+      let minLo=Infinity,maxLo=-Infinity;
+      ring.forEach(([lo])=>{if(lo<minLo)minLo=lo;if(lo>maxLo)maxLo=lo;});
+      if(maxLo-minLo>350){skip=true;break;}
+    }
+    if(skip)return;
+
+    const cf=[];
+    const fv=[];
+    const hi=[];
+    allRings.forEach((ring,ri)=>{
+      if(ri>0) hi.push(cf.length);
+      ring.forEach(([lo,la])=>{ cf.push([lo,la]); fv.push(lo,la); });
+    });
+
+    let idx;
+    try{ idx=earcut(fv,hi.length?hi:null,2); }catch(e){ return; }
     if(!idx||!idx.length)return;
-    const ac=[outer,...poly.slice(1)];const cf=[];ac.forEach(r=>r.forEach(([lo,la])=>cf.push([lo,la])));
-    idx.forEach(i=>{const[lo,la]=cf[i]||[cx,cy];const v=ll2v(la,lo,R+0.003);av.push(v.x,v.y,v.z);});
+
+    // Recursively subdivide each triangle so faces hug the sphere — 2 levels = 16 sub-triangles each
+    function smid(a,b){return a.clone().add(b).normalize().multiplyScalar(R+0.003);}
+    function subdiv(p0,p1,p2,depth){
+      if(depth===0){av.push(p0.x,p0.y,p0.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z);return;}
+      const m01=smid(p0,p1),m12=smid(p1,p2),m20=smid(p2,p0);
+      subdiv(p0,m01,m20,depth-1);subdiv(m01,p1,m12,depth-1);
+      subdiv(m20,m12,p2,depth-1);subdiv(m01,m12,m20,depth-1);
+    }
+    for(let t=0;t<idx.length;t+=3){
+      const i0=idx[t],i1=idx[t+1],i2=idx[t+2];
+      if(!cf[i0]||!cf[i1]||!cf[i2])continue;
+      const[lo0,la0]=cf[i0],[lo1,la1]=cf[i1],[lo2,la2]=cf[i2];
+      const p0=ll2v(la0,lo0,R+0.003);
+      const p1=ll2v(la1,lo1,R+0.003);
+      const p2=ll2v(la2,lo2,R+0.003);
+      subdiv(p0,p1,p2,2);
+    }
   });
+
   if(!av.length)return null;
-  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(av,3));geo.computeVertexNormals();
-  return new THREE.Mesh(geo,new THREE.MeshPhongMaterial({color:new THREE.Color(...col),transparent:op<1,opacity:op,side:THREE.DoubleSide,shininess:4}));
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(av,3));
+  geo.computeVertexNormals();
+  return new THREE.Mesh(geo,new THREE.MeshPhongMaterial({
+    color:new THREE.Color(...col),
+    transparent:true,
+    opacity:op,
+    side:THREE.DoubleSide,
+    shininess:4,
+    depthWrite:false
+  }));
 }
 function featureToBorder(feat){
-  const l=[];const ps=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.coordinates;
-  ps.forEach(p=>p.forEach(r=>{const pts=r.map(([lo,la])=>ll2v(la,lo,R+0.005));const bl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0.25}));bl.renderOrder=16;l.push(bl);}));
+  const l=[];
+  const ps=feat.geometry.type==='Polygon'?[feat.geometry.coordinates]:feat.geometry.coordinates;
+  ps.forEach(p=>p.forEach(r=>{
+    const pts=[];
+    for(let i=0;i<r.length;i++){
+      const[lo,la]=r[i];
+      if(i>0){
+        const[plo,pla]=r[i-1];
+        pts.push(ll2v((pla+la)/2,(plo+lo)/2,R+0.005));
+      }
+      pts.push(ll2v(la,lo,R+0.005));
+    }
+    const bl=new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(pts),
+      new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0.22})
+    );
+    bl.renderOrder=16;l.push(bl);
+  }));
   return l;
 }
-const cMeshes={};const DIM=[0.72,0.71,0.70];const DIM_OP=0.88;
+const cMeshes={};const DIM=[0.42,0.42,0.42];const DIM_OP=0.84;
 function buildLand(feats){
   feats.forEach(f=>{
     if(!f.geometry)return;
@@ -507,7 +537,7 @@ function applyHL(ev){
   if(!ev)return;
   currentHlIds=ev.hlIds||[];
   // Highlighted countries get a semi-transparent color overlay on top of satellite
-  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.5;m.material.transparent=true;m.renderOrder=15;}});
+  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.15;m.material.transparent=true;m.renderOrder=15;}});
 }
 
 // Arcs
@@ -722,6 +752,10 @@ async function init(){
   goTo(0);animate();
 }
 init();
+
+document.getElementById('dna-btn').addEventListener('click',()=>{
+  document.getElementById('dna-panel').classList.toggle('open');
+});
 </script>
 </body>
 </html>
