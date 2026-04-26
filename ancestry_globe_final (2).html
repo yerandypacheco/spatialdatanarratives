@@ -73,6 +73,13 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
 .tk.active .tkm{background:var(--red);}.tk.active .tkl{color:var(--red);font-weight:500;}
 .tk.near .tkl{color:var(--ink3);}
 
+/* ANCESTRY PANEL */
+#dna-btn{position:fixed;top:14px;right:14px;z-index:51;background:rgba(246,246,246,0.95);border:1px solid rgba(119,90,91,0.2);padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink2);pointer-events:all;}
+#dna-btn:hover{background:#fff;}
+#dna-panel{position:fixed;top:50px;right:14px;z-index:50;width:220px;background:rgba(246,246,246,0.97);border:1px solid rgba(119,90,91,0.2);box-shadow:4px 6px 24px rgba(42,31,31,0.14);overflow-y:auto;max-height:calc(100vh - 180px);display:none;}
+#dna-panel.open{display:block;}
+#dna-panel img{width:100%;display:block;}
+
 /* LOADING */
 #loading{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .lh{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:800;letter-spacing:-.03em;}
@@ -90,6 +97,11 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
     <div style="font-size:6.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink4);margin-top:3px">AncestryDNA · Yerandy Pacheco · Columbia GSAPP 2025</div>
   </div>
   <div class="tb-m">Dominican Republic → Brooklyn NY<br>23 Regions · 5 Continents · 10,000+ Years</div>
+</div>
+
+<button id="dna-btn">DNA Results</button>
+<div id="dna-panel">
+  <img src="ancestry_results.png" alt="AncestryDNA Results">
 </div>
 
 <div id="zoom-btns">
@@ -133,78 +145,20 @@ const P={
 
 // ═══════════════════════════════════════════
 // SATELLITE GLOBE TEXTURE
-// Stitches ArcGIS zoom-2 tiles (4x4 grid) onto a canvas → CanvasTexture
-// Avoids WebGL CORS by using 2D canvas drawImage (no getImageData needed)
+// Single equirectangular Blue Marble texture via THREE.TextureLoader
 // ═══════════════════════════════════════════
 
-function buildSatelliteTexture(onDone){
-  // Use NASA GIBS BlueMarble_ShadedRelief_Bathymetry tiles — no CORS, real satellite/topo imagery
-  // Zoom 2 = 4 cols x 2 rows in TMS (but we build a 4x4 canvas; bottom 2 rows repeat for south pole area)
-  const TILE_W=256, TILE_H=256;
-  const COLS=4, ROWS=4;
-  const cw=COLS*TILE_W, ch=ROWS*TILE_H;
-  const offscreen=document.createElement('canvas');
-  offscreen.width=cw; offscreen.height=ch;
-  const ctx=offscreen.getContext('2d');
-  ctx.fillStyle='#0d1b2a'; ctx.fillRect(0,0,cw,ch);
-
-  // NASA GIBS WMTS: BlueMarble_NextGeneration at zoom 2 is 4x2 tiles (cols 0-3, rows 0-1)
-  // We stretch it to our 4x4 canvas by doubling row height for a nicer equirectangular fit
-  let loaded=0;
-  const TILE_ROWS=2, TILE_COLS=4;
-  const total=TILE_ROWS*TILE_COLS;
-
-  function tryDone(){ loaded++; if(loaded===total) onDone(offscreen); }
-
-  for(let ty=0;ty<TILE_ROWS;ty++){
-    for(let tx=0;tx<TILE_COLS;tx++){
-      (function(row,col){
-        // NASA GIBS Blue Marble + topo shading — no auth, no CORS
-        const url=`https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/BlueMarble_NextGeneration/default/2004-08-01/GoogleMapsCompatible_Level8/${2}/${row}/${col}.jpg`;
-        const img=new Image();
-        img.crossOrigin='anonymous';
-        img.onload=function(){
-          // Each row spans half the canvas height (2 tile rows → full sphere)
-          ctx.drawImage(img, col*TILE_W, row*(ch/TILE_ROWS), TILE_W, ch/TILE_ROWS);
-          tryDone();
-        };
-        img.onerror=function(){
-          // Fallback: try Stamen terrain tiles via a different path
-          const fb=new Image();
-          fb.crossOrigin='anonymous';
-          fb.onload=function(){ ctx.drawImage(fb, col*TILE_W, row*(ch/TILE_ROWS), TILE_W, ch/TILE_ROWS); tryDone(); };
-          fb.onerror=function(){ tryDone(); };
-          fb.src=`https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2023-01-01/250m/${2}/${row}/${col}.jpg`;
-        };
-        img.src=url;
-      })(ty,tx);
-    }
-  }
-}
-
-// Called after globe is created — applies satellite texture to base sphere
 function applySatelliteTexture(){
-  buildSatelliteTexture(canvas2d=>{
-    const tex=new THREE.CanvasTexture(canvas2d);
-    tex.needsUpdate=true;
-    // Equirectangular wrapping for proper globe mapping
-    tex.wrapS=THREE.RepeatWrapping;
-    tex.wrapT=THREE.RepeatWrapping;
-    const baseSphere=globe.children[0];
-    baseSphere.material.map=tex;
-    baseSphere.material.color.set(0xffffff);
-    baseSphere.material.needsUpdate=true;
-    // Keep refreshing for a few seconds as tiles paint in
-    let refreshCount=0;
-    const interval=setInterval(()=>{
-      tex.needsUpdate=true;
-      refreshCount++;
-      if(refreshCount>30)clearInterval(interval);
-    },200);
-  });
+  new THREE.TextureLoader().load(
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+    tex=>{
+      const baseSphere=globe.children[0];
+      baseSphere.material.map=tex;
+      baseSphere.material.color.set(0xffffff);
+      baseSphere.material.needsUpdate=true;
+    }
+  );
 }
-
-// Stub — no longer needed
 function fadeAllTiles(){}
 
 // ═══════════════════════════════════════════
@@ -585,7 +539,7 @@ function featureToBorder(feat){
   }));
   return l;
 }
-const cMeshes={};const DIM=[0.72,0.71,0.70];const DIM_OP=0.88;
+const cMeshes={};const DIM=[0.42,0.42,0.42];const DIM_OP=0.84;
 function buildLand(feats){
   feats.forEach(f=>{
     if(!f.geometry)return;
@@ -603,7 +557,7 @@ function applyHL(ev){
   if(!ev)return;
   currentHlIds=ev.hlIds||[];
   // Highlighted countries get a semi-transparent color overlay on top of satellite
-  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.5;m.material.transparent=true;m.renderOrder=15;}});
+  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.15;m.material.transparent=true;m.renderOrder=15;}});
 }
 
 // Arcs
@@ -818,6 +772,10 @@ async function init(){
   goTo(0);animate();
 }
 init();
+
+document.getElementById('dna-btn').addEventListener('click',()=>{
+  document.getElementById('dna-panel').classList.toggle('open');
+});
 </script>
 </body>
 </html>
