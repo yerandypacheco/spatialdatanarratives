@@ -80,6 +80,19 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
 #dna-panel.open{display:block;}
 #dna-panel img{width:100%;display:block;}
 
+/* INTRO OVERLAY */
+#intro{position:fixed;inset:0;z-index:1000;background:var(--paper);display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+#intro .in-dna{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink4);margin-bottom:18px;}
+#intro .in-name{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:22px;}
+#intro .in-name em{color:var(--red);font-style:normal;}
+#intro .in-body{font-size:clamp(8px,1.3vw,11px);line-height:2;color:var(--ink2);max-width:560px;margin-bottom:28px;}
+#intro .in-body strong{color:var(--ink);font-weight:500;}
+#intro .in-body em{color:var(--red);font-style:normal;}
+#intro .in-sub{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);max-width:420px;line-height:2;margin-bottom:32px;}
+#intro-btn{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;background:var(--red);color:#f6f6f6;border:none;padding:10px 24px;cursor:pointer;}
+#intro-btn:hover{background:#8a1a0e;}
+#intro .in-hr{width:40px;height:1px;background:rgba(119,90,91,0.3);margin:0 auto 24px;}
+
 /* ARC TOOLTIP */
 #arc-tip{position:fixed;z-index:200;background:rgba(246,246,246,0.97);border:1px solid rgba(119,90,91,0.2);padding:10px 13px;max-width:240px;pointer-events:none;display:none;box-shadow:3px 5px 16px rgba(42,31,31,0.18);}
 #arc-tip .at-yr{font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:4px;}
@@ -107,7 +120,7 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
 
 <button id="dna-btn">DNA Results</button>
 <div id="dna-panel">
-  <img src="ancestry_results.png" alt="AncestryDNA Results">
+  <img src="Yerandy - AncestryDNA Ancestral Regions - 2642026.png" alt="AncestryDNA Results">
 </div>
 
 <div id="zoom-btns">
@@ -139,6 +152,24 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
   <div class="lh">HOW I GOT <em>HERE</em></div>
   <div class="lb-bg"><div class="lb-fill" id="lbf"></div></div>
   <div class="ll" id="lbl">Loading geography...</div>
+</div>
+
+<div id="intro">
+  <div class="in-dna">AncestryDNA · Yerandy Pacheco · Columbia GSAPP 2025</div>
+  <div class="in-name">HOW I GOT <em>HERE</em></div>
+  <div class="in-hr"></div>
+  <div class="in-body">
+    My father was born in <strong>Ecuador</strong> and moved to New York City in <em>1989</em>.<br>
+    My mother was born in the <strong>Dominican Republic</strong> and moved to New York City in <em>1993</em>.<br>
+    They met in Brooklyn. I grew up there.<br><br>
+    When I took an AncestryDNA test, what came back were <strong>23 ancestral regions</strong> across <strong>5 continents</strong> —<br>
+    stretching from the Ecuadorian Andes to the coast of West Africa,<br>
+    from the Iberian Peninsula to the Caribbean Sea.<br><br>
+    I wanted to know more about my ancestors<br>
+    and the journeys they had to take to get me to where I am.
+  </div>
+  <div class="in-sub">This is that map. Scroll or drag the timeline to travel through 10,000 years of history.</div>
+  <button id="intro-btn">Explore the journey →</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -375,6 +406,36 @@ const EVENTS=[
     today:{h:'The Dominican community in New York',t:'760,000+ Dominicans in NYC today. Washington Heights is still called Quisqueya Heights by its community. Dominican-Americans have produced mayors, congresswomen, baseball players, chefs, artists, and scholars. I live in East Brooklyn, carrying all of this forward.'}
    }},
 
+  {year:1989,short:'1989',label:'Dad leaves Ecuador for New York City — carrying 10,000 years of Andean history in his body',
+   hlIds:['218','840'],hlC:P.sage,
+   arcs:[{f:[-78.5,-1.5],t:[-73.95,40.65],col:P.sage}],
+   camLon:-76,camLat:12,camDist:2.0,
+   panel:{name:'Dad\'s Journey — Ecuador → NYC',pct:'',flag:'voluntary migration · 1989',fc:'voluntary',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Chimborazo_Ecuador.jpg/800px-Chimborazo_Ecuador.jpg',
+    imgCap:'Chimborazo, Ecuador — where my father\'s story begins',
+    stats:[{n:'1989',l:'year he arrived'},{n:'23%',l:'my Ecuadorian DNA'},{n:'200K+',l:'Ecuadorians in NYC today'}],
+    secs:[
+      {h:'My father\'s journey',t:'My father left Ecuador in 1989, part of a wave of Ecuadorian immigration driven by economic instability. He settled in New York City, carrying in his body 23% Ecuadorian DNA — Indigenous Andean peoples who have lived in those mountains for at least 10,000 years. He brought the Andes to Brooklyn.'},
+      {h:'What he carried',t:'Ecuador is the largest country in my DNA. My father\'s ancestry traces to the Kichwa peoples of the highlands — the same people who resisted the Inca Empire, survived the Spanish conquest, and built one of the most sophisticated agricultural civilizations in pre-Columbian history. That continuity is in me.'},
+    ],
+    today:{h:'The Ecuadorian community in New York',t:'Over 200,000 Ecuadorians live in New York City today. Jackson Heights, Queens became "Little Ecuador" — with Ecuadorian restaurants, music, and community organizations. My father\'s migration was part of a transformation that reshaped entire neighborhoods.'}
+   }},
+
+  {year:1993,short:'1993',label:'Mom leaves the Dominican Republic for New York City — 500 years of Caribbean history travel north',
+   hlIds:['214','840'],hlC:P.mauve,
+   arcs:[{f:[-70.5,18.5],t:[-73.95,40.65],col:P.mauve}],
+   camLon:-72,camLat:28,camDist:1.8,
+   panel:{name:'Mom\'s Journey — DR → NYC',pct:'',flag:'voluntary migration · 1993',fc:'voluntary',
+    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Santiago_de_los_Caballeros_en_El_Cibao.jpg/800px-Santiago_de_los_Caballeros_en_El_Cibao.jpg',
+    imgCap:'The Cibao Valley — where my mother\'s family is from',
+    stats:[{n:'1993',l:'year she arrived'},{n:'Cibao',l:'her ancestral valley'},{n:'Brooklyn',l:'where they met'}],
+    secs:[
+      {h:'My mother\'s journey',t:'My mother left the Dominican Republic in 1993, four years after my father arrived from Ecuador. She came from the Cibao Valley — the agricultural and cultural heartland of the country, famous for its merengue, its dialect, and its people. She settled in Brooklyn.'},
+      {h:'What she carried',t:'My mother\'s ancestry is the result of five centuries of forced and voluntary mixing on Hispaniola: West African ancestors brought in chains, Spanish colonizers, Taíno survivors, Sephardic Jewish conversos fleeing the Inquisition. The Dominican Republic is not one thing — it is everything that the Caribbean absorbed and transformed.'},
+    ],
+    today:{h:'Where two worlds met',t:'My father from Ecuador. My mother from the Dominican Republic. They met in Brooklyn. I was born there. An AncestryDNA test in 2026 revealed what happens when Andean and Caribbean history — when Indigenous and African and Iberian and European ancestry — combine in one person, going about their life in East Brooklyn.'}
+   }},
+
   {year:2025,short:'2025',label:'AncestryDNA reveals 23 regions across 5 continents — 10,000 years converge in Brooklyn',
    hlIds:['218','068','604','686','566','204','024','724','620','504','012','792','214','840'],
    hlC:P.yellow,
@@ -546,7 +607,7 @@ function applyHL(ev){
   if(!ev)return;
   currentHlIds=ev.hlIds||[];
   // Highlighted countries get a semi-transparent color overlay on top of satellite
-  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.15;m.material.transparent=true;m.renderOrder=15;}});
+  currentHlIds.forEach(id=>{const m=cMeshes[id];if(m){m.material.color.setRGB(...ev.hlC);m.material.opacity=0.55;m.material.transparent=true;m.renderOrder=15;}});
 }
 
 // Arcs
@@ -557,16 +618,12 @@ function makeArc(fLL,tLL,col,ev){
   const w=arcW(fLL);
   const pts=[];
   for(let i=0;i<=80;i++){const t=i/80;const la=fLL[1]+(tLL[1]-fLL[1])*t;const lo=fLL[0]+(tLL[0]-fLL[0])*t;const h=R+0.015+Math.sin(t*Math.PI)*0.07;pts.push(ll2v(la,lo,h));}
-  if(w>1.5){
-    const curve=new THREE.CatmullRomCurve3(pts);
-    const tr=0.0012+(w/3.5)*0.0018;
-    const tg=new THREE.TubeGeometry(curve,80,tr,5,false);
-    const tm=new THREE.Mesh(tg,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.72}));
-    tm.userData.arcMeta=meta;globe.add(tm);arcObjs.push(tm);
-  } else {
-    const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.68}));
-    ln.userData.arcMeta=meta;globe.add(ln);arcObjs.push(ln);
-  }
+  // Always use tubes so the full arc is raycaster-clickable
+  const curve=new THREE.CatmullRomCurve3(pts);
+  const tr=Math.max(0.0022,0.0012+(w/3.5)*0.0018);
+  const tg=new THREE.TubeGeometry(curve,80,tr,6,false);
+  const tm=new THREE.Mesh(tg,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.78}));
+  tm.userData.arcMeta=meta;globe.add(tm);arcObjs.push(tm);
   const tip=pts[pts.length-1],near=pts[pts.length-5];
   const dir=new THREE.Vector3().subVectors(tip,near).normalize();
   const up=tip.clone().normalize();
@@ -791,13 +848,31 @@ async function init(){
   lbf.style.width='92%';lbl.textContent='Building timeline...';
   buildDial();
   lbf.style.width='100%';
-  setTimeout(()=>{const lo=document.getElementById('loading');lo.style.transition='opacity .5s';lo.style.opacity='0';setTimeout(()=>lo.style.display='none',500);},200);
+  setTimeout(()=>{
+    const lo=document.getElementById('loading');
+    lo.style.transition='opacity .5s';lo.style.opacity='0';
+    setTimeout(()=>{
+      lo.style.display='none';
+      const intro=document.getElementById('intro');
+      intro.style.display='flex';
+      intro.style.opacity='0';
+      intro.style.transition='opacity .5s';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{intro.style.opacity='1';}));
+    },500);
+  },200);
   goTo(0);animate();
 }
 init();
 
 document.getElementById('dna-btn').addEventListener('click',()=>{
   document.getElementById('dna-panel').classList.toggle('open');
+});
+
+document.getElementById('intro-btn').addEventListener('click',()=>{
+  const el=document.getElementById('intro');
+  el.style.transition='opacity .6s';
+  el.style.opacity='0';
+  setTimeout(()=>el.style.display='none',620);
 });
 </script>
 </body>
