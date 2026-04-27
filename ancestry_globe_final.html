@@ -80,6 +80,12 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
 #dna-panel.open{display:block;}
 #dna-panel img{width:100%;display:block;}
 
+/* ARC TOOLTIP */
+#arc-tip{position:fixed;z-index:200;background:rgba(246,246,246,0.97);border:1px solid rgba(119,90,91,0.2);padding:10px 13px;max-width:240px;pointer-events:none;display:none;box-shadow:3px 5px 16px rgba(42,31,31,0.18);}
+#arc-tip .at-yr{font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:4px;}
+#arc-tip .at-route{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:1rem;font-weight:700;line-height:1.2;color:var(--red);margin-bottom:5px;}
+#arc-tip .at-lbl{font-size:7.5px;line-height:1.6;color:var(--ink2);}
+
 /* LOADING */
 #loading{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .lh{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:clamp(2rem,6vw,5rem);font-weight:800;letter-spacing:-.03em;}
@@ -121,6 +127,12 @@ html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:
     <div class="yr-h">drag · scroll · arrows</div>
   </div>
   <div id="dw"><div id="dn"></div><div id="dt"></div></div>
+</div>
+
+<div id="arc-tip">
+  <div class="at-yr" id="at-yr"></div>
+  <div class="at-route" id="at-route"></div>
+  <div class="at-lbl" id="at-lbl"></div>
 </div>
 
 <div id="loading">
@@ -171,6 +183,30 @@ const ARC_PCT={
   '[-77,1]':8,'[-5.5,35.8]':6,
 };
 function arcW(f){const k=JSON.stringify(f);const p=ARC_PCT[k]||4;return 0.4+(p/23)*2.8;}
+
+const LOC_NAMES={
+  '[-78.5,-1.5]':'Ecuador / Andes',
+  '[-65,-16]':'Bolivia / Potosí',
+  '[-6,37]':'Morocco / North Africa',
+  '[-3.7,40.2]':'Spain',
+  '[-15,14]':'Senegambia / West Africa',
+  '[3,6]':'Nigeria / Gulf of Guinea',
+  '[14,-4]':'Central Africa / Congo',
+  '[-4,40]':'Spain',
+  '[3,28]':'Sub-Saharan Africa',
+  '[35,39]':'Middle East / Levant',
+  '[-2,52]':'England / Britain',
+  '[13,42]':'Italy',
+  '[-70.5,18.5]':'Dominican Republic',
+  '[-77,1]':'Colombia',
+  '[-5.5,35.8]':'Strait of Gibraltar',
+  '[-5.5,37.2]':'Southern Spain',
+  '[-73.95,40.65]':'Brooklyn, New York',
+  '[-38,-10]':'Latin America / Brazil',
+  '[-70,18.5]':'Hispaniola',
+  '[-9,38.7]':'Portugal',
+};
+function locName(ll){return LOC_NAMES[JSON.stringify(ll)]||JSON.stringify(ll);}
 
 // ═══════════════════════════════════════════
 // TIMELINE EVENTS
@@ -405,33 +441,6 @@ globe.add(new THREE.Mesh(
   for(let lo=-180;lo<180;lo+=30){const pts=[];for(let la=-88;la<=88;la+=3)pts.push(ll2v(la,lo,R+0.001));globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat));}
 })();
 
-// Lakes
-const LAKES=[
-  [[50,36],[54,37],[53,40],[50,43],[48,45],[49,47],[51,42],[52,38],[50,36]],
-  [[-92,46],[-84,46],[-84,48],[-89,49],[-92,47],[-92,46]],
-  [[-87,42],[-84,44],[-87,46],[-88,44],[-87,42]],
-  [[-82,43],[-79,44],[-83,46],[-84,45],[-82,43]],
-  [[31,-1],[34,-1],[34,-3],[31,-2],[31,-1]],
-  [[104,51],[110,52],[109,55],[104,52],[104,51]],
-  [[29,-3],[31,-4],[31,-9],[29,-7],[29,-3]],
-  [[-70,-15],[-68,-15],[-68,-17],[-70,-16],[-70,-15]],
-];
-(function(){
-  const mat=new THREE.MeshPhongMaterial({color:0x7AACCF,shininess:25,specular:0xA0CCE0});
-  LAKES.forEach(coords=>{
-    if(coords.length<3)return;
-    let cx=0,cy=0;coords.forEach(([lo,la])=>{cx+=lo;cy+=la;});cx/=coords.length;cy/=coords.length;
-    const norm=ll2v(cy,cx,1).normalize();
-    let east=new THREE.Vector3(0,1,0).cross(norm).normalize();if(east.length()<0.01)east.set(1,0,0);
-    const north=norm.clone().cross(east).normalize();
-    const flat=[];coords.forEach(([lo,la])=>{const v=ll2v(la,lo,1);flat.push(v.dot(east),v.dot(north));});
-    let idx;try{idx=earcut(flat,null,2);}catch(e){return;}
-    if(!idx||!idx.length)return;
-    const verts=[];idx.forEach(i=>{const[lo,la]=coords[i]||[cx,cy];const v=ll2v(la,lo,R+0.004);verts.push(v.x,v.y,v.z);});
-    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.computeVertexNormals();
-    globe.add(new THREE.Mesh(geo,mat));
-  });
-})();
 
 // Country tessellation
 // earcut in lon/lat, then subdivide each triangle edge to follow sphere curvature.
@@ -519,7 +528,7 @@ function featureToBorder(feat){
   }));
   return l;
 }
-const cMeshes={};const DIM=[0.42,0.42,0.42];const DIM_OP=0.84;
+const cMeshes={};const DIM=[0.42,0.42,0.42];const DIM_OP=0;
 function buildLand(feats){
   feats.forEach(f=>{
     if(!f.geometry)return;
@@ -532,7 +541,7 @@ function buildLand(feats){
 let currentHlIds=[];
 function applyHL(ev){
   // All country meshes transparent by default — satellite texture shows through
-  Object.values(cMeshes).forEach(m=>{m.material.color.setRGB(...DIM);m.material.opacity=0.88;m.material.transparent=true;m.renderOrder=15;});
+  Object.values(cMeshes).forEach(m=>{m.material.color.setRGB(...DIM);m.material.opacity=0;m.material.transparent=true;m.renderOrder=15;});
   currentHlIds=[];
   if(!ev)return;
   currentHlIds=ev.hlIds||[];
@@ -543,7 +552,8 @@ function applyHL(ev){
 // Arcs
 let arcObjs=[];
 function clearArcs(){arcObjs.forEach(o=>globe.remove(o));arcObjs=[];}
-function makeArc(fLL,tLL,col){
+function makeArc(fLL,tLL,col,ev){
+  const meta={from:locName(fLL),to:locName(tLL),year:ev?ev.short:'',label:ev?ev.label:''};
   const w=arcW(fLL);
   const pts=[];
   for(let i=0;i<=80;i++){const t=i/80;const la=fLL[1]+(tLL[1]-fLL[1])*t;const lo=fLL[0]+(tLL[0]-fLL[0])*t;const h=R+0.015+Math.sin(t*Math.PI)*0.07;pts.push(ll2v(la,lo,h));}
@@ -552,10 +562,10 @@ function makeArc(fLL,tLL,col){
     const tr=0.0012+(w/3.5)*0.0018;
     const tg=new THREE.TubeGeometry(curve,80,tr,5,false);
     const tm=new THREE.Mesh(tg,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.72}));
-    globe.add(tm);arcObjs.push(tm);
+    tm.userData.arcMeta=meta;globe.add(tm);arcObjs.push(tm);
   } else {
     const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:new THREE.Color(...col),transparent:true,opacity:0.68}));
-    globe.add(ln);arcObjs.push(ln);
+    ln.userData.arcMeta=meta;globe.add(ln);arcObjs.push(ln);
   }
   const tip=pts[pts.length-1],near=pts[pts.length-5];
   const dir=new THREE.Vector3().subVectors(tip,near).normalize();
@@ -565,14 +575,13 @@ function makeArc(fLL,tLL,col){
   const back=dir.clone().multiplyScalar(-as*2.2);
   const av2=[tip.x,tip.y,tip.z,tip.x+back.x+right.x,tip.y+back.y+right.y,tip.z+back.z+right.z,tip.x+back.x-right.x,tip.y+back.y-right.y,tip.z+back.z-right.z];
   const ag=new THREE.BufferGeometry();ag.setAttribute('position',new THREE.Float32BufferAttribute(av2,3));
-  globe.add(new THREE.Mesh(ag,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide})));
-  const ar=new THREE.Mesh(ag.clone(),new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));
-  arcObjs.push(ar);
+  const arrowMesh=new THREE.Mesh(ag,new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));
+  arrowMesh.userData.arcMeta=meta;globe.add(arrowMesh);arcObjs.push(arrowMesh);
   const dr=0.003+(w/3.5)*0.002;
   const dot=new THREE.Mesh(new THREE.SphereGeometry(dr,6,6),new THREE.MeshBasicMaterial({color:new THREE.Color(...col)}));
-  dot.position.copy(ll2v(fLL[1],fLL[0],R+0.02));globe.add(dot);arcObjs.push(dot);
+  dot.userData.arcMeta=meta;dot.position.copy(ll2v(fLL[1],fLL[0],R+0.02));globe.add(dot);arcObjs.push(dot);
 }
-function applyArcs(ev){clearArcs();if(!ev||!ev.arcs)return;ev.arcs.forEach(a=>makeArc(a.f,a.t,a.col));}
+function applyArcs(ev){clearArcs();if(!ev||!ev.arcs)return;ev.arcs.forEach(a=>makeArc(a.f,a.t,a.col,ev));}
 
 // Brooklyn dot
 const bkd=new THREE.Mesh(new THREE.SphereGeometry(0.009,8,8),new THREE.MeshBasicMaterial({color:0xAA2111}));
@@ -731,6 +740,40 @@ function openPanel(ev){
   h+=`</div>`;
   pc.innerHTML=h;panelEl.classList.add('open');
 }
+
+// ─ ARC CLICK ─
+const arcRaycaster=new THREE.Raycaster();
+arcRaycaster.params.Line={threshold:0.015};
+let mouseDownPos={x:0,y:0};
+canvas.addEventListener('mousedown',e=>{mouseDownPos={x:e.clientX,y:e.clientY};});
+canvas.addEventListener('click',e=>{
+  // Ignore if the mouse moved significantly (was a drag, not a click)
+  if(Math.abs(e.clientX-mouseDownPos.x)>5||Math.abs(e.clientY-mouseDownPos.y)>5)return;
+  const rect=canvas.getBoundingClientRect();
+  const mouse=new THREE.Vector2(
+    (e.clientX-rect.left)/rect.width*2-1,
+    -(e.clientY-rect.top)/rect.height*2+1
+  );
+  arcRaycaster.setFromCamera(mouse,camera);
+  const hits=arcRaycaster.intersectObjects(arcObjs,false);
+  const hit=hits.find(h=>h.object.userData.arcMeta);
+  if(hit){
+    showArcTip(e.clientX,e.clientY,hit.object.userData.arcMeta);
+  } else {
+    hideArcTip();
+  }
+});
+function showArcTip(x,y,meta){
+  const tip=document.getElementById('arc-tip');
+  document.getElementById('at-yr').textContent=meta.year;
+  document.getElementById('at-route').textContent=meta.from+' → '+meta.to;
+  document.getElementById('at-lbl').textContent=meta.label;
+  const tw=244,th=90;
+  tip.style.left=Math.min(x+14,window.innerWidth-tw)+'px';
+  tip.style.top=Math.min(y-10,window.innerHeight-th-80)+'px';
+  tip.style.display='block';
+}
+function hideArcTip(){document.getElementById('arc-tip').style.display='none';}
 
 // ─ RESIZE ─
 window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
